@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/providers/auth-provider";
 import { useConversations } from "@/hooks/use-messages";
 import { PageLoading } from "@/components/ui/loading";
@@ -12,6 +13,8 @@ import { getImageUrl } from "@/lib/utils";
 export default function MessagesPage() {
   const { user, loading } = useAuth();
   const { data: conversations, isLoading } = useConversations(user?.id);
+  const t = useTranslations("messages");
+  const tc = useTranslations("common");
 
   if (loading) return <PageLoading />;
 
@@ -21,10 +24,10 @@ export default function MessagesPage() {
         <div className="text-center">
           <MessageCircle size={48} className="mx-auto text-gray-300" />
           <h2 className="mt-4 text-xl font-bold text-gray-900">
-            Sign in to see your messages
+            {t("signInPrompt")}
           </h2>
           <Link href="/auth/login">
-            <Button className="mt-4">Sign in</Button>
+            <Button className="mt-4">{tc("signIn")}</Button>
           </Link>
         </div>
       </div>
@@ -33,8 +36,8 @@ export default function MessagesPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">Messages</h1>
-      <p className="mt-2 text-gray-500">Your conversations with other users</p>
+      <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
+      <p className="mt-2 text-gray-500">{t("subtitle")}</p>
 
       <div className="mt-8 space-y-2">
         {isLoading ? (
@@ -42,7 +45,7 @@ export default function MessagesPage() {
         ) : !conversations?.length ? (
           <div className="py-12 text-center">
             <MessageCircle size={48} className="mx-auto text-gray-300" />
-            <p className="mt-4 text-gray-500">No conversations yet</p>
+            <p className="mt-4 text-gray-500">{t("noConversations")}</p>
           </div>
         ) : (
           conversations.map((conv) => {
@@ -77,7 +80,7 @@ export default function MessagesPage() {
                     </span>
                   </div>
                   <p className="truncate text-sm text-gray-500">
-                    Re: {conv.item?.title}
+                    {t("re")} {conv.item?.title}
                   </p>
                 </div>
                 {conv.item?.images?.[0] && (

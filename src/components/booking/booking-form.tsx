@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,6 +36,8 @@ export function BookingForm({ item }: BookingFormProps) {
   const createBooking = useCreateBooking();
   const { data: existingBookings } = useItemBookings(item.id);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("booking");
+  const tc = useTranslations("common");
 
   const {
     register,
@@ -71,12 +74,12 @@ export function BookingForm({ item }: BookingFormProps) {
     }
 
     if (user.id === item.owner_id) {
-      setError("You cannot book your own item");
+      setError(t("cannotBookOwn"));
       return;
     }
 
     if (isDateConflict(data.start_date, data.end_date)) {
-      setError("These dates are not available");
+      setError(t("datesNotAvailable"));
       return;
     }
 
@@ -96,7 +99,7 @@ export function BookingForm({ item }: BookingFormProps) {
         router.push(`/checkout/${result.booking.id}`);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("somethingWentWrong"));
     }
   };
 
@@ -109,21 +112,21 @@ export function BookingForm({ item }: BookingFormProps) {
           <span className="text-2xl font-bold text-gray-900">
             {formatCurrency(item.price_per_day)}
           </span>
-          <span className="text-gray-500"> / day</span>
+          <span className="text-gray-500"> {tc("perDay")}</span>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <Input
-            label="Start date"
+            label={t("startDate")}
             type="date"
             min={today}
             error={errors.start_date?.message}
             {...register("start_date")}
           />
           <Input
-            label="End date"
+            label={t("endDate")}
             type="date"
             min={startDate || today}
             error={errors.end_date?.message}
@@ -141,12 +144,12 @@ export function BookingForm({ item }: BookingFormProps) {
                     new Date(startDate).getTime()) /
                     (1000 * 60 * 60 * 24)
                 )}{" "}
-                days
+                {tc("days")}
               </span>
               <span className="font-medium">{formatCurrency(totalPrice)}</span>
             </div>
             <div className="mt-2 flex items-center justify-between border-t border-gray-200 pt-2">
-              <span className="font-semibold text-gray-900">Total</span>
+              <span className="font-semibold text-gray-900">{tc("total")}</span>
               <span className="text-lg font-bold text-emerald-600">
                 {formatCurrency(totalPrice)}
               </span>
@@ -165,18 +168,17 @@ export function BookingForm({ item }: BookingFormProps) {
           disabled={createBooking.isPending}
         >
           {createBooking.isPending ? (
-            "Processing..."
+            t("processing")
           ) : (
             <>
               <CreditCard size={18} className="mr-2" />
-              Book & Pay
+              {t("bookAndPay")}
             </>
           )}
         </Button>
 
         <p className="text-center text-xs text-gray-500">
-          Secure payment via Stripe. You won&apos;t be charged until the booking
-          is confirmed.
+          {t("securePayment")}
         </p>
       </form>
 
@@ -184,7 +186,7 @@ export function BookingForm({ item }: BookingFormProps) {
         <div className="mt-4 border-t border-gray-200 pt-4">
           <h4 className="mb-2 flex items-center gap-1.5 text-sm font-medium text-gray-700">
             <Calendar size={14} />
-            Unavailable dates
+            {t("unavailableDates")}
           </h4>
           <div className="space-y-1">
             {existingBookings.map((booking, i) => (

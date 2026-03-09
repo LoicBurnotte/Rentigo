@@ -1,7 +1,12 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Leaf } from "lucide-react";
 
 export function Footer() {
+  const t = useTranslations("footer");
+
   return (
     <footer className="border-t border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -14,24 +19,23 @@ export function Footer() {
               <span className="text-lg font-bold text-gray-900">Rentigo</span>
             </Link>
             <p className="mt-3 text-sm text-gray-500">
-              Rent anything from people nearby. Promote reuse, save money, and
-              help the planet.
+              {t("tagline")}
             </p>
             <div className="mt-3 flex items-center gap-1.5 text-sm text-emerald-600">
               <Leaf size={14} />
-              <span>Promoting circular economy</span>
+              <span>{t("circularEconomy")}</span>
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Marketplace</h3>
+            <h3 className="text-sm font-semibold text-gray-900">{t("marketplace")}</h3>
             <ul className="mt-3 space-y-2">
               <li>
                 <Link
                   href="/marketplace"
                   className="text-sm text-gray-500 hover:text-gray-900"
                 >
-                  Browse Items
+                  {t("browseItems")}
                 </Link>
               </li>
               <li>
@@ -39,7 +43,7 @@ export function Footer() {
                   href="/map"
                   className="text-sm text-gray-500 hover:text-gray-900"
                 >
-                  Map View
+                  {t("mapView")}
                 </Link>
               </li>
               <li>
@@ -47,7 +51,7 @@ export function Footer() {
                   href="/marketplace?category=tools"
                   className="text-sm text-gray-500 hover:text-gray-900"
                 >
-                  Tools
+                  {t("tools")}
                 </Link>
               </li>
               <li>
@@ -55,21 +59,21 @@ export function Footer() {
                   href="/marketplace?category=electronics"
                   className="text-sm text-gray-500 hover:text-gray-900"
                 >
-                  Electronics
+                  {t("electronics")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">For Owners</h3>
+            <h3 className="text-sm font-semibold text-gray-900">{t("forOwners")}</h3>
             <ul className="mt-3 space-y-2">
               <li>
                 <Link
                   href="/items/new"
                   className="text-sm text-gray-500 hover:text-gray-900"
                 >
-                  List an Item
+                  {t("listAnItem")}
                 </Link>
               </li>
               <li>
@@ -77,7 +81,7 @@ export function Footer() {
                   href="/profile"
                   className="text-sm text-gray-500 hover:text-gray-900"
                 >
-                  Your Profile
+                  {t("yourProfile")}
                 </Link>
               </li>
             </ul>
@@ -85,19 +89,17 @@ export function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold text-gray-900">
-              Sustainability
+              {t("sustainability")}
             </h3>
             <p className="mt-3 text-sm text-gray-500">
-              Every rental prevents an unnecessary purchase. Together, we reduce
-              waste and build a more sustainable future through sharing.
+              {t("sustainabilityText")}
             </p>
           </div>
         </div>
 
         <div className="mt-8 border-t border-gray-200 pt-8">
           <p className="text-center text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} Rentigo. All rights reserved.
-            Built for a sustainable future.
+            &copy; {new Date().getFullYear()} {t("copyright")}
           </p>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,12 +12,24 @@ export function SearchFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
+  const t = useTranslations("marketplace");
+  const tc = useTranslations("categories");
+  const tCommon = useTranslations("common");
 
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [category, setCategory] = useState(searchParams.get("category") || "");
   const [city, setCity] = useState(searchParams.get("city") || "");
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
+
+  const CATEGORY_NAME_KEYS: Record<string, string> = {
+    tools: "tools",
+    cameras: "cameras",
+    "outdoor-gear": "outdoorGear",
+    "event-equipment": "eventEquipment",
+    electronics: "electronics",
+    "sports-equipment": "sportsEquipment",
+  };
 
   const applyFilters = useCallback(() => {
     const params = new URLSearchParams();
@@ -52,7 +65,7 @@ export function SearchFilters() {
           />
           <input
             type="text"
-            placeholder="What do you want to rent?"
+            placeholder={t("searchPlaceholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -60,7 +73,7 @@ export function SearchFilters() {
           />
         </div>
         <Button onClick={applyFilters} size="lg">
-          Search
+          {tCommon("search")}
         </Button>
         <Button
           variant="outline"
@@ -74,36 +87,36 @@ export function SearchFilters() {
       {showFilters && (
         <div className="rounded-xl border border-gray-200 bg-white p-4">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900">Filters</h3>
+            <h3 className="font-semibold text-gray-900">{t("filters")}</h3>
             <button
               onClick={clearFilters}
               className="text-sm text-emerald-600 hover:text-emerald-700"
             >
-              Clear all
+              {t("clearAll")}
             </button>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700">
-                Category
+                {t("category")}
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
               >
-                <option value="">All categories</option>
+                <option value="">{t("allCategories")}</option>
                 {CATEGORIES.map((cat) => (
                   <option key={cat.slug} value={cat.slug}>
-                    {cat.name}
+                    {tc(CATEGORY_NAME_KEYS[cat.slug] || cat.slug)}
                   </option>
                 ))}
               </select>
             </div>
 
             <Input
-              label="City"
+              label={t("city")}
               placeholder="e.g. Brussels"
               value={city}
               onChange={(e) => setCity(e.target.value)}
@@ -111,7 +124,7 @@ export function SearchFilters() {
             />
 
             <Input
-              label="Min price (€/day)"
+              label={t("minPrice")}
               type="number"
               placeholder="0"
               value={minPrice}
@@ -120,7 +133,7 @@ export function SearchFilters() {
             />
 
             <Input
-              label="Max price (€/day)"
+              label={t("maxPrice")}
               type="number"
               placeholder="500"
               value={maxPrice}
@@ -130,7 +143,7 @@ export function SearchFilters() {
           </div>
 
           <div className="mt-4 flex justify-end">
-            <Button onClick={applyFilters}>Apply Filters</Button>
+            <Button onClick={applyFilters}>{t("applyFilters")}</Button>
           </div>
         </div>
       )}
@@ -156,7 +169,7 @@ export function SearchFilters() {
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            {cat.name}
+            {tc(CATEGORY_NAME_KEYS[cat.slug] || cat.slug)}
             {cat.slug === category && <X size={14} />}
           </button>
         ))}

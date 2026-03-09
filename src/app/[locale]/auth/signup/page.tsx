@@ -1,45 +1,75 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginInput } from "@/lib/validations";
+import { signUpSchema, type SignUpInput } from "@/lib/validations";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LogIn } from "lucide-react";
+import { UserPlus } from "lucide-react";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const t = useTranslations("auth");
+  const tc = useTranslations("common");
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<SignUpInput>({
+    resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = async (data: LoginInput) => {
+  const onSubmit = async (data: SignUpInput) => {
     setError(null);
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error: signUpError } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
+      options: {
+        data: { name: data.name },
+        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+      },
     });
 
-    if (error) {
-      setError(error.message);
+    if (signUpError) {
+      setError(signUpError.message);
       return;
     }
 
-    router.push("/");
-    router.refresh();
+    setSuccess(true);
   };
+
+  if (success) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center px-4">
+        <div className="w-full max-w-md text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-xl font-bold text-white">
+            R
+          </div>
+          <h1 className="mt-4 text-2xl font-bold text-gray-900">
+            {t("checkEmail")}
+          </h1>
+          <p className="mt-2 text-gray-500">
+            {t("confirmationSent")}
+          </p>
+          <Link href="/auth/login">
+            <Button variant="outline" className="mt-6">
+              {t("backToLogin")}
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4">
@@ -49,10 +79,10 @@ export default function LoginPage() {
             R
           </div>
           <h1 className="mt-4 text-2xl font-bold text-gray-900">
-            Welcome back
+            {t("createAccount")}
           </h1>
           <p className="mt-2 text-sm text-gray-500">
-            Sign in to your Rentigo account
+            {t("joinRentigo")}
           </p>
         </div>
 
@@ -61,8 +91,16 @@ export default function LoginPage() {
           className="mt-8 space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
         >
           <Input
+            id="name"
+            label={t("fullName")}
+            placeholder="John Doe"
+            error={errors.name?.message}
+            {...register("name")}
+          />
+
+          <Input
             id="email"
-            label="Email"
+            label={t("email")}
             type="email"
             placeholder="you@example.com"
             error={errors.email?.message}
@@ -71,9 +109,9 @@ export default function LoginPage() {
 
           <Input
             id="password"
-            label="Password"
+            label={t("password")}
             type="password"
-            placeholder="Your password"
+            placeholder={t("minChars")}
             error={errors.password?.message}
             {...register("password")}
           />
@@ -88,18 +126,18 @@ export default function LoginPage() {
             className="w-full"
             disabled={isSubmitting}
           >
-            <LogIn size={18} className="mr-2" />
-            {isSubmitting ? "Signing in..." : "Sign in"}
+            <UserPlus size={18} className="mr-2" />
+            {isSubmitting ? t("creatingAccount") : t("createAccount")}
           </Button>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-500">
-          Don&apos;t have an account?{" "}
+          {t("alreadyHaveAccount")}{" "}
           <Link
-            href="/auth/signup"
+            href="/auth/login"
             className="font-medium text-emerald-600 hover:text-emerald-700"
           >
-            Sign up
+            {tc("signIn")}
           </Link>
         </p>
       </div>

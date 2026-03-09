@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Upload, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { getImageUrl } from "@/lib/utils";
@@ -20,6 +21,7 @@ export function ImageUpload({
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const supabase = createClient();
+  const t = useTranslations("newItem");
 
   const handleUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +61,7 @@ export function ImageUpload({
   return (
     <div>
       <label className="mb-1.5 block text-sm font-medium text-gray-700">
-        Photos (max {maxImages})
+        {t("photos")} (max {maxImages})
       </label>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
         {images.map((image, index) => (
@@ -87,7 +89,7 @@ export function ImageUpload({
           <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 hover:border-emerald-500 hover:bg-emerald-50/50">
             <Upload size={24} className="text-gray-400" />
             <span className="mt-1 text-xs text-gray-500">
-              {uploading ? "Uploading..." : "Upload"}
+              {uploading ? t("uploading") : t("upload")}
             </span>
             <input
               type="file"

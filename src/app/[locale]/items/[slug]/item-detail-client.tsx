@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -33,6 +33,8 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
   const toggleFavorite = useToggleFavorite();
   const createConversation = useCreateConversation();
   const [currentImage, setCurrentImage] = useState(0);
+  const t = useTranslations("itemDetail");
+  const tc = useTranslations("common");
 
   const isFavorited = favoriteIds?.has(item.id) ?? false;
 
@@ -124,7 +126,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
             </div>
           ) : (
             <div className="flex aspect-[16/10] items-center justify-center rounded-xl bg-gray-100 text-gray-400">
-              No images available
+              {t("noImages")}
             </div>
           )}
 
@@ -157,7 +159,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
                         : "mr-1.5"
                     }
                   />
-                  {isFavorited ? "Saved" : "Save"}
+                  {isFavorited ? t("saved") : tc("save")}
                 </Button>
                 <Button
                   variant="outline"
@@ -176,7 +178,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
 
             <div className="mt-6">
               <h2 className="text-lg font-semibold text-gray-900">
-                Description
+                {t("description")}
               </h2>
               <p className="mt-2 whitespace-pre-wrap text-gray-600">
                 {item.description}
@@ -187,7 +189,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
           {/* Owner */}
           <div className="rounded-xl border border-gray-200 bg-white p-6">
             <h2 className="text-lg font-semibold text-gray-900">
-              Listed by
+              {t("listedBy")}
             </h2>
             <div className="mt-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -213,7 +215,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
               {user && user.id !== item.owner?.id && (
                 <Button variant="outline" onClick={handleContact}>
                   <MessageCircle size={16} className="mr-1.5" />
-                  Contact
+                  {t("contact")}
                 </Button>
               )}
             </div>

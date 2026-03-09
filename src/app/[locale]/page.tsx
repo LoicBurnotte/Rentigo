@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -19,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { ItemGrid } from "@/components/items/item-grid";
 import { useItems } from "@/hooks/use-items";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 const CATEGORY_ICONS = {
   Wrench,
@@ -31,18 +32,21 @@ const CATEGORY_ICONS = {
 };
 
 const FEATURED_CATEGORIES = [
-  { name: "Tools", slug: "tools", icon: "Wrench", color: "bg-orange-100 text-orange-600" },
-  { name: "Cameras", slug: "cameras", icon: "Camera", color: "bg-blue-100 text-blue-600" },
-  { name: "Outdoor Gear", slug: "outdoor-gear", icon: "Mountain", color: "bg-green-100 text-green-600" },
-  { name: "Event Equipment", slug: "event-equipment", icon: "PartyPopper", color: "bg-purple-100 text-purple-600" },
-  { name: "Electronics", slug: "electronics", icon: "Laptop", color: "bg-indigo-100 text-indigo-600" },
-  { name: "Sports", slug: "sports-equipment", icon: "Dumbbell", color: "bg-red-100 text-red-600" },
+  { nameKey: "tools", slug: "tools", icon: "Wrench", color: "bg-orange-100 text-orange-600" },
+  { nameKey: "cameras", slug: "cameras", icon: "Camera", color: "bg-blue-100 text-blue-600" },
+  { nameKey: "outdoorGear", slug: "outdoor-gear", icon: "Mountain", color: "bg-green-100 text-green-600" },
+  { nameKey: "eventEquipment", slug: "event-equipment", icon: "PartyPopper", color: "bg-purple-100 text-purple-600" },
+  { nameKey: "electronics", slug: "electronics", icon: "Laptop", color: "bg-indigo-100 text-indigo-600" },
+  { nameKey: "sportsEquipment", slug: "sports-equipment", icon: "Dumbbell", color: "bg-red-100 text-red-600" },
 ];
 
 export default function HomePage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const { data: recentItems, isLoading } = useItems();
+  const t = useTranslations("home");
+  const tc = useTranslations("categories");
+  const tCommon = useTranslations("common");
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -66,15 +70,14 @@ export default function HomePage() {
           >
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-emerald-100 backdrop-blur-sm">
               <Leaf size={16} />
-              Promoting circular economy &amp; sustainability
+              {t("badge")}
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Rent anything from{" "}
-              <span className="text-emerald-200">people nearby</span>
+              {t("heroTitle")}{" "}
+              <span className="text-emerald-200">{t("heroHighlight")}</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-emerald-100">
-              Why buy when you can rent? Save money, reduce waste, and discover
-              amazing items in your neighborhood.
+              {t("heroSubtitle")}
             </p>
 
             <div className="mx-auto mt-10 max-w-xl">
@@ -86,7 +89,7 @@ export default function HomePage() {
                   />
                   <input
                     type="text"
-                    placeholder="What do you want to rent?"
+                    placeholder={t("searchPlaceholder")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -98,7 +101,7 @@ export default function HomePage() {
                   className="m-2 rounded-lg px-8"
                   onClick={handleSearch}
                 >
-                  Search
+                  {tCommon("search")}
                 </Button>
               </div>
             </div>
@@ -109,7 +112,7 @@ export default function HomePage() {
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <h2 className="text-center text-2xl font-bold text-gray-900">
-          Browse by Category
+          {t("browseByCategory")}
         </h2>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {FEATURED_CATEGORIES.map((cat) => {
@@ -131,7 +134,7 @@ export default function HomePage() {
                     <IconComponent size={24} />
                   </div>
                   <span className="text-sm font-medium text-gray-900">
-                    {cat.name}
+                    {tc(cat.nameKey)}
                   </span>
                 </Link>
               </motion.div>
@@ -143,12 +146,12 @@ export default function HomePage() {
       {/* Recent Items */}
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">Recently Listed</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t("recentlyListed")}</h2>
           <Link
             href="/marketplace"
             className="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700"
           >
-            View all <ArrowRight size={16} />
+            {tCommon("viewAll")} <ArrowRight size={16} />
           </Link>
         </div>
         <ItemGrid
@@ -161,27 +164,24 @@ export default function HomePage() {
       <section className="border-t border-gray-200 bg-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-2xl font-bold text-gray-900">
-            How It Works
+            {t("howItWorks")}
           </h2>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             {[
               {
                 icon: Search,
-                title: "Find what you need",
-                description:
-                  "Browse thousands of items available for rent in your area. Use filters to find exactly what you need.",
+                title: t("step1Title"),
+                description: t("step1Desc"),
               },
               {
                 icon: Shield,
-                title: "Book securely",
-                description:
-                  "Reserve your item, pay securely through Stripe, and coordinate with the owner via messaging.",
+                title: t("step2Title"),
+                description: t("step2Desc"),
               },
               {
                 icon: MapPin,
-                title: "Pick up nearby",
-                description:
-                  "Meet the owner, pick up your item, and enjoy! Return it when you're done.",
+                title: t("step3Title"),
+                description: t("step3Desc"),
               },
             ].map((step, i) => (
               <motion.div
@@ -212,17 +212,14 @@ export default function HomePage() {
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <Leaf size={40} className="mx-auto text-emerald-600" />
           <h2 className="mt-4 text-2xl font-bold text-gray-900">
-            Every Rental Makes a Difference
+            {t("sustainTitle")}
           </h2>
           <p className="mt-4 text-gray-600">
-            By renting instead of buying, you help reduce waste, lower carbon
-            emissions, and promote a circular economy. Every item shared is one
-            less item manufactured, packaged, and eventually discarded. Together,
-            we can build a more sustainable future through the power of sharing.
+            {t("sustainText")}
           </p>
           <Link href="/marketplace">
             <Button size="lg" className="mt-8">
-              Start Renting Today
+              {t("startRenting")}
             </Button>
           </Link>
         </div>

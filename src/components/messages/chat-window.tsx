@@ -1,12 +1,12 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/providers/auth-provider";
 import { useMessages, useSendMessage } from "@/hooks/use-messages";
-import { formatDate } from "@/lib/utils";
 
 interface ChatWindowProps {
   conversationId: string;
@@ -17,6 +17,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const { data: messages, isLoading } = useMessages(conversationId);
   const sendMessage = useSendMessage();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("messages");
 
   const { register, handleSubmit, reset } = useForm<{ message: string }>();
 
@@ -85,7 +86,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         <div className="flex gap-3">
           <input
             {...register("message")}
-            placeholder="Type a message..."
+            placeholder={t("typePlaceholder")}
             className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             autoComplete="off"
           />
