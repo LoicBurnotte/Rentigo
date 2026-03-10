@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSchema, type ProfileInput } from "@/lib/validations";
@@ -16,7 +17,6 @@ import { Badge } from "@/components/ui/badge";
 import { ItemGrid } from "@/components/items/item-grid";
 import { PageLoading } from "@/components/ui/loading";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { BOOKING_STATUSES } from "@/lib/constants";
 import { User, CreditCard, Package, Calendar } from "lucide-react";
 
 export default function ProfilePage() {
@@ -27,6 +27,9 @@ export default function ProfilePage() {
   const [editing, setEditing] = useState(false);
   const [stripeLoading, setStripeLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const t = useTranslations("profile");
+  const ts = useTranslations("bookingStatus");
+  const tc = useTranslations("common");
 
   const {
     register,
@@ -57,7 +60,7 @@ export default function ProfilePage() {
 
     if (!error) {
       setEditing(false);
-      setSuccessMsg("Profile updated");
+      setSuccessMsg(t("profileUpdated"));
       setTimeout(() => setSuccessMsg(null), 3000);
     }
   };
@@ -77,7 +80,7 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">Your Profile</h1>
+      <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
 
       {/* Profile Info */}
       <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -101,7 +104,7 @@ export default function ProfilePage() {
             size="sm"
             onClick={() => setEditing(!editing)}
           >
-            {editing ? "Cancel" : "Edit"}
+            {editing ? tc("cancel") : tc("edit")}
           </Button>
         </div>
 
@@ -109,19 +112,19 @@ export default function ProfilePage() {
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
             <Input
               id="name"
-              label="Name"
+              label={t("name")}
               error={errors.name?.message}
               {...register("name")}
             />
             <Input
               id="location"
-              label="Location"
-              placeholder="e.g. Brussels, Belgium"
+              label={t("location")}
+              placeholder={t("locationPlaceholder")}
               error={errors.location?.message}
               {...register("location")}
             />
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Changes"}
+              {isSubmitting ? t("saving") : t("saveChanges")}
             </Button>
           </form>
         )}
@@ -135,24 +138,23 @@ export default function ProfilePage() {
       <div className="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
           <CreditCard size={20} />
-          Payment Setup
+          {t("paymentSetup")}
         </h3>
         {profile?.stripe_account_id ? (
           <p className="mt-2 text-sm text-emerald-600">
-            Stripe account connected. You can receive payments.
+            {t("stripeConnected")}
           </p>
         ) : (
           <div className="mt-2">
             <p className="text-sm text-gray-500">
-              Connect your Stripe account to receive payments when renters book
-              your items.
+              {t("stripeSetupText")}
             </p>
             <Button
               className="mt-4"
               onClick={connectStripe}
               disabled={stripeLoading}
             >
-              {stripeLoading ? "Connecting..." : "Connect Stripe Account"}
+              {stripeLoading ? t("connecting") : t("connectStripe")}
             </Button>
           </div>
         )}
@@ -162,7 +164,7 @@ export default function ProfilePage() {
       <div className="mt-8">
         <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
           <Package size={20} />
-          Your Listings
+          {t("yourListings")}
         </h3>
         <div className="mt-4">
           <ItemGrid items={userItems} />
@@ -173,15 +175,12 @@ export default function ProfilePage() {
       <div className="mt-8">
         <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
           <Calendar size={20} />
-          Your Bookings
+          {t("yourBookings")}
         </h3>
         <div className="mt-4 space-y-3">
           {bookings?.length ? (
             bookings.map((booking) => {
-              const statusConfig =
-                BOOKING_STATUSES[
-                  booking.status as keyof typeof BOOKING_STATUSES
-                ];
+              const statusKey = booking.status as "pending" | "confirmed" | "cancelled" | "completed";
               return (
                 <div
                   key={booking.id}
@@ -203,15 +202,15 @@ export default function ProfilePage() {
                     <p className="font-semibold text-gray-900">
                       {formatCurrency(booking.total_price)}
                     </p>
-                    <Badge className={statusConfig?.color}>
-                      {statusConfig?.label || booking.status}
+                    <Badge>
+                      {ts(statusKey)}
                     </Badge>
                   </div>
                 </div>
               );
             })
           ) : (
-            <p className="py-8 text-center text-gray-500">No bookings yet</p>
+            <p className="py-8 text-center text-gray-500">{t("noBookings")}</p>
           )}
         </div>
       </div>

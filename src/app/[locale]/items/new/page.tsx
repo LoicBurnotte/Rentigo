@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { itemSchema, type ItemInput } from "@/lib/validations";
@@ -25,6 +26,7 @@ export default function NewItemPage() {
   const [images, setImages] = useState<string[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("newItem");
 
   const {
     register,
@@ -53,7 +55,7 @@ export default function NewItemPage() {
     setError(null);
 
     if (images.length === 0) {
-      setError("Please upload at least one image");
+      setError(t("uploadAtLeastOne"));
       return;
     }
 
@@ -67,15 +69,15 @@ export default function NewItemPage() {
       });
       router.push(`/items/${slug}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create listing");
+      setError(err instanceof Error ? err.message : t("failedToCreate"));
     }
   };
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">List a New Item</h1>
+      <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
       <p className="mt-2 text-gray-500">
-        Share your items with your community and earn money
+        {t("subtitle")}
       </p>
 
       <form
@@ -84,16 +86,16 @@ export default function NewItemPage() {
       >
         <Input
           id="title"
-          label="Title"
-          placeholder="e.g. Canon EOS R5 Camera"
+          label={t("itemTitle")}
+          placeholder={t("titlePlaceholder")}
           error={errors.title?.message}
           {...register("title")}
         />
 
         <Textarea
           id="description"
-          label="Description"
-          placeholder="Describe your item, its condition, and what's included..."
+          label={t("descriptionLabel")}
+          placeholder={t("descriptionPlaceholder")}
           error={errors.description?.message}
           {...register("description")}
         />
@@ -101,8 +103,8 @@ export default function NewItemPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           <Select
             id="category_id"
-            label="Category"
-            placeholder="Select a category"
+            label={t("category")}
+            placeholder={t("selectCategory")}
             options={categories.map((c) => ({
               value: c.id,
               label: c.name,
@@ -113,7 +115,7 @@ export default function NewItemPage() {
 
           <Input
             id="price_per_day"
-            label="Price per day (EUR)"
+            label={t("pricePerDay")}
             type="number"
             step="0.01"
             placeholder="25.00"
@@ -124,8 +126,8 @@ export default function NewItemPage() {
 
         <Input
           id="city"
-          label="City"
-          placeholder="e.g. Brussels"
+          label={t("city")}
+          placeholder={t("cityPlaceholder")}
           error={errors.city?.message}
           {...register("city")}
         />
@@ -133,7 +135,7 @@ export default function NewItemPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           <Input
             id="latitude"
-            label="Latitude"
+            label={t("latitude")}
             type="number"
             step="any"
             placeholder="50.8503"
@@ -142,7 +144,7 @@ export default function NewItemPage() {
           />
           <Input
             id="longitude"
-            label="Longitude"
+            label={t("longitude")}
             type="number"
             step="any"
             placeholder="4.3517"
@@ -162,7 +164,7 @@ export default function NewItemPage() {
           disabled={isSubmitting || createItem.isPending}
         >
           <Plus size={18} className="mr-2" />
-          {isSubmitting ? "Creating..." : "Create Listing"}
+          {isSubmitting ? t("creating") : t("createListing")}
         </Button>
       </form>
     </div>

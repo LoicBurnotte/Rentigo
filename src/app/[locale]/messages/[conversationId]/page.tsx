@@ -1,7 +1,8 @@
 "use client";
 
 import { use } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import { ChatWindow } from "@/components/messages/chat-window";
 import { useAuth } from "@/providers/auth-provider";
@@ -14,6 +15,7 @@ interface Props {
 export default function ConversationPage({ params }: Props) {
   const { conversationId } = use(params);
   const { user, loading } = useAuth();
+  const t = useTranslations("messages");
 
   if (loading) return <PageLoading />;
   if (!user) return null;
@@ -26,7 +28,7 @@ export default function ConversationPage({ params }: Props) {
           className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft size={16} />
-          Back to messages
+          {t("backToMessages")}
         </Link>
       </div>
       <div className="flex-1 overflow-hidden">

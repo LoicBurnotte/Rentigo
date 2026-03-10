@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Heart, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { formatCurrency, getImageUrl } from "@/lib/utils";
@@ -18,6 +19,7 @@ export function ItemCard({ item }: ItemCardProps) {
   const { data: favoriteIds } = useFavoriteIds(user?.id);
   const toggleFavorite = useToggleFavorite();
   const isFavorited = favoriteIds?.has(item.id) ?? false;
+  const tc = useTranslations("common");
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -87,10 +89,10 @@ export function ItemCard({ item }: ItemCardProps) {
           <div className="mt-2 flex items-center justify-between">
             <span className="text-lg font-bold text-emerald-600">
               {formatCurrency(item.price_per_day)}
-              <span className="text-sm font-normal text-gray-500">/day</span>
+              <span className="text-sm font-normal text-gray-500">{tc("perDay")}</span>
             </span>
             <span className="text-sm text-gray-500">
-              by {item.owner?.name}
+              {tc("by")} {item.owner?.name}
             </span>
           </div>
         </div>

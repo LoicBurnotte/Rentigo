@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { useItems } from "@/hooks/use-items";
 import { PageLoading } from "@/components/ui/loading";
 
@@ -11,6 +12,7 @@ const MapView = dynamic(
 
 export default function MapPage() {
   const { data: items, isLoading } = useItems();
+  const t = useTranslations("map");
 
   if (isLoading) return <PageLoading />;
 
@@ -18,10 +20,10 @@ export default function MapPage() {
     <div className="flex flex-col" style={{ height: "calc(100vh - 4rem)" }}>
       <div className="border-b border-gray-200 bg-white px-4 py-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-bold text-gray-900">
-          Items Near You
+          {t("title")}
         </h1>
         <p className="text-sm text-gray-500">
-          {items?.length || 0} items available on the map
+          {t("itemsAvailable", { count: items?.length || 0 })}
         </p>
       </div>
       <div className="flex-1">
