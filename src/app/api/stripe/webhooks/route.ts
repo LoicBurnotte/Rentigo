@@ -1,66 +1,53 @@
-import { stripe } from "@/lib/stripe";
-import { createServiceRoleClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
-import type Stripe from "stripe";
+import { stripe } from '@/lib/stripe'
+import { createServiceRoleClient } from '@/lib/supabase/server'
+import { NextResponse } from 'next/server'
+import type Stripe from 'stripe'
 
 export async function POST(request: Request) {
-  const body = await request.text();
-  const signature = request.headers.get("stripe-signature");
+  const body = await request.text()
+  const signature = request.headers.get('stripe-signature')
 
   if (!signature) {
-    return NextResponse.json(
-      { error: "No signature provided" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'No signature provided' }, { status: 400 })
   }
 
-  let event: Stripe.Event;
+  let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch {
-    return NextResponse.json(
-      { error: "Invalid signature" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
-  const supabase = await createServiceRoleClient();
+  const supabase = await createServiceRoleClient()
 
   switch (event.type) {
-    case "checkout.session.completed": {
-      const session = event.data.object as Stripe.Checkout.Session;
-      const bookingId = session.metadata?.booking_id;
+    case 'checkout.session.completed': {
+      const session = event.data.object as Stripe.Checkout.Session
+      const bookingId = session.metadata?.booking_id
 
       if (bookingId) {
         await supabase
-          .from("bookings")
+          .from('bookings')
           .update({
-            status: "confirmed",
+            status: 'confirmed',
             stripe_payment_intent: session.payment_intent as string,
           })
-          .eq("id", bookingId);
+          .eq('id', bookingId)
       }
-      break;
+      break
     }
 
-    case "checkout.session.expired": {
-      const session = event.data.object as Stripe.Checkout.Session;
-      const bookingId = session.metadata?.booking_id;
+    case 'checkout.session.expired': {
+      const session = event.data.object as Stripe.Checkout.Session
+      const bookingId = session.metadata?.booking_id
 
       if (bookingId) {
-        await supabase
-          .from("bookings")
-          .update({ status: "cancelled" })
-          .eq("id", bookingId);
+        await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', bookingId)
       }
-      break;
+      break
     }
   }
 
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ received: true })
 }

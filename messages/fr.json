@@ -28,9 +28,9 @@
   "header": {
     "browse": "Explorer",
     "map": "Carte",
-    "listItem": "Publier",
     "favorites": "Favoris",
-    "messages": "Messages"
+    "messages": "Messages",
+    "myListings": "Mes annonces"
   },
   "footer": {
     "tagline": "Louez n'importe quoi près de chez vous. Favorisez la réutilisation, économisez et aidez la planète.",
@@ -82,12 +82,15 @@
     "clearAll": "Tout effacer",
     "category": "Catégorie",
     "allCategories": "Toutes les catégories",
-    "city": "Ville",
     "minPrice": "Prix min (€/jour)",
     "maxPrice": "Prix max (€/jour)",
     "applyFilters": "Appliquer les filtres",
     "noItems": "Aucun article trouvé",
-    "noItemsHint": "Essayez de modifier votre recherche ou vos filtres"
+    "noItemsHint": "Essayez de modifier votre recherche ou vos filtres",
+    "locationLabel": "Localisation",
+    "locationSearch": "Rechercher une ville, un village ou un quartier...",
+    "radius": "Rayon de recherche",
+    "radiusActive": "Annonces à moins de {radius} km de {city}"
   },
   "auth": {
     "welcomeBack": "Bon retour",
@@ -135,7 +138,8 @@
     "connectStripe": "Connecter un compte Stripe",
     "yourListings": "Vos annonces",
     "yourBookings": "Vos réservations",
-    "noBookings": "Aucune réservation pour le moment"
+    "noBookings": "Aucune réservation pour le moment",
+    "yourListingsHint": "Gérez, modifiez et supprimez vos annonces"
   },
   "booking": {
     "startDate": "Date de début",
@@ -153,7 +157,8 @@
     "listedBy": "Publié par",
     "contact": "Contacter",
     "saved": "Enregistré",
-    "noImages": "Aucune image disponible"
+    "noImages": "Aucune image disponible",
+    "editListing": "Modifier l'annonce"
   },
   "newItem": {
     "title": "Publier un nouvel article",
@@ -165,21 +170,33 @@
     "category": "Catégorie",
     "selectCategory": "Sélectionnez une catégorie",
     "pricePerDay": "Prix par jour (EUR)",
-    "city": "Ville",
-    "cityPlaceholder": "ex. Bruxelles",
-    "latitude": "Latitude",
-    "longitude": "Longitude",
+    "searchAddress": "Localisation",
+    "addressPlaceholder": "Tapez une adresse pour rechercher...",
+    "addressSearching": "Recherche en cours...",
+    "noAddressFound": "Aucune adresse trouvée. Essayez une autre recherche.",
+    "approxLocationNote": "Seule la zone approximative est affichée publiquement. Votre adresse exacte reste privée.",
     "photos": "Photos",
     "uploading": "Téléchargement...",
     "upload": "Télécharger",
+    "setThumbnail": "Définir comme miniature",
+    "thumbnailBadge": "Miniature",
     "creating": "Création...",
     "createListing": "Créer l'annonce",
     "uploadAtLeastOne": "Veuillez télécharger au moins une image",
+    "selectLocation": "Veuillez rechercher et sélectionner une adresse",
     "failedToCreate": "Échec de la création de l'annonce"
+  },
+  "editItem": {
+    "title": "Modifier l'annonce",
+    "subtitle": "Mettez à jour les informations de votre article",
+    "saving": "Enregistrement...",
+    "saveChanges": "Enregistrer les modifications",
+    "failedToUpdate": "Échec de la mise à jour de l'annonce"
   },
   "map": {
     "title": "Articles près de chez vous",
-    "itemsAvailable": "{count} articles disponibles sur la carte"
+    "itemsAvailable": "{count} articles disponibles sur la carte",
+    "myLocation": "Ma position"
   },
   "checkout": {
     "bookingNotFound": "Réservation introuvable",
@@ -201,5 +218,34 @@
     "en": "English",
     "fr": "Français",
     "nl": "Nederlands"
+  },
+  "myItems": {
+    "title": "Mes annonces",
+    "count": "{count} annonce",
+    "countPlural": "{count} annonces",
+    "noItems": "Aucune annonce pour le moment",
+    "noItemsHint": "Commencez à gagner de l'argent en partageant vos affaires avec votre communauté.",
+    "addListing": "Ajouter une annonce",
+    "viewItem": "Voir",
+    "editItem": "Modifier",
+    "deleteItem": "Supprimer",
+    "deleteConfirm": "Supprimer cette annonce ?",
+    "confirmDelete": "Oui, supprimer",
+    "cancelDelete": "Annuler",
+    "deletingItem": "Suppression..."
+  },
+  "validation": {
+    "nameMin": "Le nom doit contenir au moins 2 caractères",
+    "emailInvalid": "Adresse e-mail invalide",
+    "passwordMin": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordRequired": "Le mot de passe est requis",
+    "titleMin": "Le titre doit contenir au moins 3 caractères",
+    "titleMax": "Le titre doit contenir moins de 100 caractères",
+    "descriptionMin": "La description doit contenir au moins 10 caractères",
+    "descriptionMax": "La description doit contenir moins de 2000 caractères",
+    "categoryRequired": "Veuillez sélectionner une catégorie",
+    "priceMin": "Le prix doit être au moins de 1 €",
+    "priceMax": "Le prix doit être inférieur à 10 000 €",
+    "cityRequired": "La ville est requise"
   }
 }

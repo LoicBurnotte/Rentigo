@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -10,6 +10,28 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+/* Ensure all interactive elements show pointer cursor */
+button,
+[role='button'],
+a,
+select {
+  cursor: pointer;
+}
+
+/* Global fetch progress bar */
+@keyframes fetching-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-fetching-bar {
+  animation: fetching-bar 1.2s ease-in-out infinite;
 }
 
 /* Leaflet CSS override for Next.js */

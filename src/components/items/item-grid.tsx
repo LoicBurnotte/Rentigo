@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { useTranslations } from "next-intl";
-import { ItemCard } from "./item-card";
-import { ItemCardSkeleton } from "@/components/ui/loading";
-import type { ItemWithOwner } from "@/types";
+import { useTranslations } from 'next-intl'
+import { ItemCard } from './item-card'
+import { ItemCardSkeleton } from '@/components/ui/loading'
+import type { ItemWithOwner } from '@/types'
 
 interface ItemGridProps {
-  items?: ItemWithOwner[];
-  isLoading?: boolean;
+  items?: ItemWithOwner[]
+  isLoading?: boolean
 }
 
 export function ItemGrid({ items, isLoading }: ItemGridProps) {
-  const t = useTranslations("marketplace");
+  const t = useTranslations('marketplace')
 
   if (isLoading) {
     return (
@@ -20,18 +20,16 @@ export function ItemGrid({ items, isLoading }: ItemGridProps) {
           <ItemCardSkeleton key={i} />
         ))}
       </div>
-    );
+    )
   }
 
   if (!items?.length) {
     return (
       <div className="py-12 text-center">
-        <p className="text-lg text-gray-500">{t("noItems")}</p>
-        <p className="mt-1 text-sm text-gray-400">
-          {t("noItemsHint")}
-        </p>
+        <p className="text-lg text-gray-500">{t('noItems')}</p>
+        <p className="mt-1 text-sm text-gray-400">{t('noItemsHint')}</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -40,5 +38,5 @@ export function ItemGrid({ items, isLoading }: ItemGridProps) {
         <ItemCard key={item.id} item={item} />
       ))}
     </div>
-  );
+  )
 }

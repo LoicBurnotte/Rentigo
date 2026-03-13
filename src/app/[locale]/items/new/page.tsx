@@ -1,172 +1,166 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { itemSchema, type ItemInput } from "@/lib/validations";
-import { createClient } from "@/lib/supabase/client";
-import { useAuth } from "@/providers/auth-provider";
-import { useCreateItem } from "@/hooks/use-items";
-import { createSlug } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@/components/ui/select";
-import { ImageUpload } from "@/components/items/image-upload";
-import { PageLoading } from "@/components/ui/loading";
-import { Plus } from "lucide-react";
-import type { Category } from "@/types";
+import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createItemSchema, type ItemFormInput, type ItemInput } from '@/lib/validations'
+import { createClient } from '@/lib/supabase/client'
+import { useAuth } from '@/providers/auth-provider'
+import { useCreateItem } from '@/hooks/use-items'
+import { createSlug } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { ImageUpload } from '@/components/items/image-upload'
+import { PageLoading } from '@/components/ui/loading'
+import { Plus } from 'lucide-react'
+import type { Category } from '@/types'
+import type { LocationValue } from '@/components/items/location-picker'
+
+const LocationPicker = dynamic(() => import('@/components/items/location-picker').then((mod) => mod.LocationPicker), {
+  ssr: false,
+  loading: () => <div className="h-10 animate-pulse rounded-lg bg-gray-100" />,
+})
 
 export default function NewItemPage() {
-  const router = useRouter();
-  const { user, loading } = useAuth();
-  const createItem = useCreateItem();
-  const [images, setImages] = useState<string[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const t = useTranslations("newItem");
+  const router = useRouter()
+  const { user, loading } = useAuth()
+  const createItem = useCreateItem()
+  const [images, setImages] = useState<string[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [location, setLocation] = useState<LocationValue | undefined>()
+  const [locationError, setLocationError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('newItem')
+  const tv = useTranslations('validation')
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<ItemInput>({
-    resolver: zodResolver(itemSchema),
-  });
+  } = useForm<ItemFormInput, unknown, ItemInput>({
+    resolver: zodResolver(createItemSchema(tv)),
+  })
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const supabase = createClient();
-      const { data } = await supabase.from("categories").select("*");
-      if (data) setCategories(data);
-    };
-    fetchCategories();
-  }, []);
+      const supabase = createClient()
+      const { data } = await supabase.from('categories').select('*')
+      if (data) setCategories(data)
+    }
+    fetchCategories()
+  }, [])
 
-  if (loading) return <PageLoading />;
+  if (loading) return <PageLoading />
   if (!user) {
-    router.push("/auth/login");
-    return null;
+    router.push('/auth/login')
+    return null
+  }
+
+  const handleLocationChange = (loc: LocationValue) => {
+    setLocation(loc)
+    setLocationError(null)
+    setValue('city', loc.city, { shouldValidate: true })
+    setValue('latitude', loc.latitude, { shouldValidate: true })
+    setValue('longitude', loc.longitude, { shouldValidate: true })
   }
 
   const onSubmit = async (data: ItemInput) => {
-    setError(null);
+    setError(null)
 
     if (images.length === 0) {
-      setError(t("uploadAtLeastOne"));
-      return;
+      setError(t('uploadAtLeastOne'))
+      return
+    }
+
+    if (!location) {
+      setLocationError(t('selectLocation'))
+      return
     }
 
     try {
-      const slug = createSlug(data.title);
+      const slug = createSlug(data.title)
       await createItem.mutateAsync({
         ...data,
         slug,
         images,
         owner_id: user.id,
-      });
-      router.push(`/items/${slug}`);
+      })
+      router.push(`/items/${slug}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("failedToCreate"));
+      setError(err instanceof Error ? err.message : t('failedToCreate'))
     }
-  };
+  }
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
-      <p className="mt-2 text-gray-500">
-        {t("subtitle")}
-      </p>
+      <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+      <p className="mt-2 text-gray-500">{t('subtitle')}</p>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-8 space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
-      >
+        className="mt-8 space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <Input
           id="title"
-          label={t("itemTitle")}
-          placeholder={t("titlePlaceholder")}
+          label={t('itemTitle')}
+          placeholder={t('titlePlaceholder')}
           error={errors.title?.message}
-          {...register("title")}
+          {...register('title')}
         />
 
         <Textarea
           id="description"
-          label={t("descriptionLabel")}
-          placeholder={t("descriptionPlaceholder")}
+          label={t('descriptionLabel')}
+          placeholder={t('descriptionPlaceholder')}
           error={errors.description?.message}
-          {...register("description")}
+          {...register('description')}
         />
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Select
             id="category_id"
-            label={t("category")}
-            placeholder={t("selectCategory")}
+            label={t('category')}
+            placeholder={t('selectCategory')}
             options={categories.map((c) => ({
               value: c.id,
               label: c.name,
             }))}
             error={errors.category_id?.message}
-            {...register("category_id")}
+            {...register('category_id')}
           />
 
           <Input
             id="price_per_day"
-            label={t("pricePerDay")}
+            label={t('pricePerDay')}
             type="number"
             step="0.01"
             placeholder="25.00"
             error={errors.price_per_day?.message}
-            {...register("price_per_day")}
+            {...register('price_per_day')}
           />
         </div>
 
-        <Input
-          id="city"
-          label={t("city")}
-          placeholder={t("cityPlaceholder")}
-          error={errors.city?.message}
-          {...register("city")}
-        />
+        {/* Hidden fields populated by LocationPicker */}
+        <input type="hidden" {...register('city')} />
+        <input type="hidden" {...register('latitude')} />
+        <input type="hidden" {...register('longitude')} />
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Input
-            id="latitude"
-            label={t("latitude")}
-            type="number"
-            step="any"
-            placeholder="50.8503"
-            error={errors.latitude?.message}
-            {...register("latitude")}
-          />
-          <Input
-            id="longitude"
-            label={t("longitude")}
-            type="number"
-            step="any"
-            placeholder="4.3517"
-            error={errors.longitude?.message}
-            {...register("longitude")}
-          />
-        </div>
+        <LocationPicker value={location} onChange={handleLocationChange} error={locationError ?? undefined} />
 
         <ImageUpload images={images} onChange={setImages} />
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <Button
-          type="submit"
-          size="lg"
-          className="w-full"
-          disabled={isSubmitting || createItem.isPending}
-        >
+        <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || createItem.isPending}>
           <Plus size={18} className="mr-2" />
-          {isSubmitting ? t("creating") : t("createListing")}
+          {isSubmitting ? t('creating') : t('createListing')}
         </Button>
       </form>
     </div>
-  );
+  )
 }

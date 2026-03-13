@@ -28,9 +28,9 @@
   "header": {
     "browse": "Browse",
     "map": "Map",
-    "listItem": "List Item",
     "favorites": "Favorites",
-    "messages": "Messages"
+    "messages": "Messages",
+    "myListings": "My Listings"
   },
   "footer": {
     "tagline": "Rent anything from people nearby. Promote reuse, save money, and help the planet.",
@@ -82,12 +82,15 @@
     "clearAll": "Clear all",
     "category": "Category",
     "allCategories": "All categories",
-    "city": "City",
     "minPrice": "Min price (€/day)",
     "maxPrice": "Max price (€/day)",
     "applyFilters": "Apply Filters",
     "noItems": "No items found",
-    "noItemsHint": "Try adjusting your search or filters"
+    "noItemsHint": "Try adjusting your search or filters",
+    "locationLabel": "Location",
+    "locationSearch": "Search for a city, village or area...",
+    "radius": "Search radius",
+    "radiusActive": "Showing items within {radius} km of {city}"
   },
   "auth": {
     "welcomeBack": "Welcome back",
@@ -135,7 +138,8 @@
     "connectStripe": "Connect Stripe Account",
     "yourListings": "Your Listings",
     "yourBookings": "Your Bookings",
-    "noBookings": "No bookings yet"
+    "noBookings": "No bookings yet",
+    "yourListingsHint": "Manage, edit and delete your listings"
   },
   "booking": {
     "startDate": "Start date",
@@ -153,7 +157,8 @@
     "listedBy": "Listed by",
     "contact": "Contact",
     "saved": "Saved",
-    "noImages": "No images available"
+    "noImages": "No images available",
+    "editListing": "Edit Listing"
   },
   "newItem": {
     "title": "List a New Item",
@@ -165,21 +170,33 @@
     "category": "Category",
     "selectCategory": "Select a category",
     "pricePerDay": "Price per day (EUR)",
-    "city": "City",
-    "cityPlaceholder": "e.g. Brussels",
-    "latitude": "Latitude",
-    "longitude": "Longitude",
+    "searchAddress": "Location",
+    "addressPlaceholder": "Type a street address to search...",
+    "addressSearching": "Searching addresses...",
+    "noAddressFound": "No address found. Try a different search.",
+    "approxLocationNote": "Only the approximate area is shown publicly. Your exact address stays private.",
     "photos": "Photos",
     "uploading": "Uploading...",
     "upload": "Upload",
+    "setThumbnail": "Set as thumbnail",
+    "thumbnailBadge": "Thumbnail",
     "creating": "Creating...",
     "createListing": "Create Listing",
     "uploadAtLeastOne": "Please upload at least one image",
+    "selectLocation": "Please search and select a location",
     "failedToCreate": "Failed to create listing"
+  },
+  "editItem": {
+    "title": "Edit Listing",
+    "subtitle": "Update your item information",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "failedToUpdate": "Failed to update listing"
   },
   "map": {
     "title": "Items Near You",
-    "itemsAvailable": "{count} items available on the map"
+    "itemsAvailable": "{count} items available on the map",
+    "myLocation": "My location"
   },
   "checkout": {
     "bookingNotFound": "Booking not found",
@@ -201,5 +218,34 @@
     "en": "English",
     "fr": "Français",
     "nl": "Nederlands"
+  },
+  "myItems": {
+    "title": "My Listings",
+    "count": "{count} listing",
+    "countPlural": "{count} listings",
+    "noItems": "No listings yet",
+    "noItemsHint": "Start earning by sharing items you own with your community.",
+    "addListing": "Add a listing",
+    "viewItem": "View",
+    "editItem": "Edit",
+    "deleteItem": "Delete",
+    "deleteConfirm": "Delete this listing?",
+    "confirmDelete": "Yes, delete",
+    "cancelDelete": "Cancel",
+    "deletingItem": "Deleting..."
+  },
+  "validation": {
+    "nameMin": "Name must be at least 2 characters",
+    "emailInvalid": "Invalid email address",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordRequired": "Password is required",
+    "titleMin": "Title must be at least 3 characters",
+    "titleMax": "Title must be less than 100 characters",
+    "descriptionMin": "Description must be at least 10 characters",
+    "descriptionMax": "Description must be less than 2000 characters",
+    "categoryRequired": "Please select a category",
+    "priceMin": "Price must be at least €1",
+    "priceMax": "Price must be less than €10,000",
+    "cityRequired": "City is required"
   }
 }

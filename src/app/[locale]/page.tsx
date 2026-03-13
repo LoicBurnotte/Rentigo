@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { motion } from "framer-motion";
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
+import { motion } from 'framer-motion'
 import {
   Search,
   Leaf,
@@ -15,12 +15,12 @@ import {
   PartyPopper,
   Laptop,
   Dumbbell,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ItemGrid } from "@/components/items/item-grid";
-import { useItems } from "@/hooks/use-items";
-import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ItemGrid } from '@/components/items/item-grid'
+import { useItems } from '@/hooks/use-items'
+import { useState } from 'react'
+import { useRouter } from '@/i18n/navigation'
 
 const CATEGORY_ICONS = {
   Wrench,
@@ -29,32 +29,32 @@ const CATEGORY_ICONS = {
   PartyPopper,
   Laptop,
   Dumbbell,
-};
+}
 
 const FEATURED_CATEGORIES = [
-  { nameKey: "tools", slug: "tools", icon: "Wrench", color: "bg-orange-100 text-orange-600" },
-  { nameKey: "cameras", slug: "cameras", icon: "Camera", color: "bg-blue-100 text-blue-600" },
-  { nameKey: "outdoorGear", slug: "outdoor-gear", icon: "Mountain", color: "bg-green-100 text-green-600" },
-  { nameKey: "eventEquipment", slug: "event-equipment", icon: "PartyPopper", color: "bg-purple-100 text-purple-600" },
-  { nameKey: "electronics", slug: "electronics", icon: "Laptop", color: "bg-indigo-100 text-indigo-600" },
-  { nameKey: "sportsEquipment", slug: "sports-equipment", icon: "Dumbbell", color: "bg-red-100 text-red-600" },
-];
+  { nameKey: 'tools', slug: 'tools', icon: 'Wrench', color: 'bg-orange-100 text-orange-600' },
+  { nameKey: 'cameras', slug: 'cameras', icon: 'Camera', color: 'bg-blue-100 text-blue-600' },
+  { nameKey: 'outdoorGear', slug: 'outdoor-gear', icon: 'Mountain', color: 'bg-green-100 text-green-600' },
+  { nameKey: 'eventEquipment', slug: 'event-equipment', icon: 'PartyPopper', color: 'bg-purple-100 text-purple-600' },
+  { nameKey: 'electronics', slug: 'electronics', icon: 'Laptop', color: 'bg-indigo-100 text-indigo-600' },
+  { nameKey: 'sportsEquipment', slug: 'sports-equipment', icon: 'Dumbbell', color: 'bg-red-100 text-red-600' },
+]
 
 export default function HomePage() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const { data: recentItems, isLoading } = useItems();
-  const t = useTranslations("home");
-  const tc = useTranslations("categories");
-  const tCommon = useTranslations("common");
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState('')
+  const { data: recentItems, isLoading } = useItems()
+  const t = useTranslations('home')
+  const tc = useTranslations('categories')
+  const tCommon = useTranslations('common')
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      router.push(`/marketplace?q=${encodeURIComponent(searchQuery)}`);
+      router.push(`/marketplace?q=${encodeURIComponent(searchQuery)}`)
     } else {
-      router.push("/marketplace");
+      router.push('/marketplace')
     }
-  };
+  }
 
   return (
     <div>
@@ -66,42 +66,31 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center"
-          >
+            className="text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-emerald-100 backdrop-blur-sm">
               <Leaf size={16} />
-              {t("badge")}
+              {t('badge')}
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {t("heroTitle")}{" "}
-              <span className="text-emerald-200">{t("heroHighlight")}</span>
+              {t('heroTitle')} <span className="text-emerald-200">{t('heroHighlight')}</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-emerald-100">
-              {t("heroSubtitle")}
-            </p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-emerald-100">{t('heroSubtitle')}</p>
 
             <div className="mx-auto mt-10 max-w-xl">
-              <div className="flex overflow-hidden rounded-xl bg-white shadow-xl">
-                <div className="relative flex-1">
-                  <Search
-                    size={20}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
+              <div className="flex h-16 items-center overflow-hidden rounded-xl bg-white shadow-xl">
+                <div className="relative flex h-full flex-1 items-center">
+                  <Search size={20} className="absolute left-4 text-gray-400" />
                   <input
                     type="text"
-                    placeholder={t("searchPlaceholder")}
+                    placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    className="h-14 w-full pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none"
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    className="h-full w-full pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:outline-none"
                   />
                 </div>
-                <Button
-                  size="lg"
-                  className="m-2 rounded-lg px-8"
-                  onClick={handleSearch}
-                >
-                  {tCommon("search")}
+                <Button size="lg" className="mx-2 shrink-0 rounded-lg px-8" onClick={handleSearch}>
+                  {tCommon('search')}
                 </Button>
               </div>
             </div>
@@ -111,34 +100,22 @@ export default function HomePage() {
 
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-bold text-gray-900">
-          {t("browseByCategory")}
-        </h2>
+        <h2 className="text-center text-2xl font-bold text-gray-900">{t('browseByCategory')}</h2>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {FEATURED_CATEGORIES.map((cat) => {
-            const IconComponent =
-              CATEGORY_ICONS[cat.icon as keyof typeof CATEGORY_ICONS];
+            const IconComponent = CATEGORY_ICONS[cat.icon as keyof typeof CATEGORY_ICONS]
             return (
-              <motion.div
-                key={cat.slug}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <motion.div key={cat.slug} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href={`/marketplace?category=${cat.slug}`}
-                  className="flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-                >
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl ${cat.color}`}
-                  >
+                  className="flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${cat.color}`}>
                     <IconComponent size={24} />
                   </div>
-                  <span className="text-sm font-medium text-gray-900">
-                    {tc(cat.nameKey)}
-                  </span>
+                  <span className="text-sm font-medium text-gray-900">{tc(cat.nameKey)}</span>
                 </Link>
               </motion.div>
-            );
+            )
           })}
         </div>
       </section>
@@ -146,42 +123,36 @@ export default function HomePage() {
       {/* Recent Items */}
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">{t("recentlyListed")}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t('recentlyListed')}</h2>
           <Link
             href="/marketplace"
-            className="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700"
-          >
-            {tCommon("viewAll")} <ArrowRight size={16} />
+            className="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700">
+            {tCommon('viewAll')} <ArrowRight size={16} />
           </Link>
         </div>
-        <ItemGrid
-          items={recentItems?.slice(0, 6)}
-          isLoading={isLoading}
-        />
+        <ItemGrid items={recentItems?.slice(0, 6)} isLoading={isLoading} />
       </section>
 
       {/* How It Works */}
       <section className="border-t border-gray-200 bg-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-2xl font-bold text-gray-900">
-            {t("howItWorks")}
-          </h2>
+          <h2 className="text-center text-2xl font-bold text-gray-900">{t('howItWorks')}</h2>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             {[
               {
                 icon: Search,
-                title: t("step1Title"),
-                description: t("step1Desc"),
+                title: t('step1Title'),
+                description: t('step1Desc'),
               },
               {
                 icon: Shield,
-                title: t("step2Title"),
-                description: t("step2Desc"),
+                title: t('step2Title'),
+                description: t('step2Desc'),
               },
               {
                 icon: MapPin,
-                title: t("step3Title"),
-                description: t("step3Desc"),
+                title: t('step3Title'),
+                description: t('step3Desc'),
               },
             ].map((step, i) => (
               <motion.div
@@ -190,17 +161,12 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
-                className="text-center"
-              >
+                className="text-center">
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
                   <step.icon size={28} />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-sm text-gray-500">
-                  {step.description}
-                </p>
+                <h3 className="mt-4 text-lg font-semibold text-gray-900">{step.title}</h3>
+                <p className="mt-2 text-sm text-gray-500">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -211,19 +177,15 @@ export default function HomePage() {
       <section className="bg-emerald-50 py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <Leaf size={40} className="mx-auto text-emerald-600" />
-          <h2 className="mt-4 text-2xl font-bold text-gray-900">
-            {t("sustainTitle")}
-          </h2>
-          <p className="mt-4 text-gray-600">
-            {t("sustainText")}
-          </p>
+          <h2 className="mt-4 text-2xl font-bold text-gray-900">{t('sustainTitle')}</h2>
+          <p className="mt-4 text-gray-600">{t('sustainText')}</p>
           <Link href="/marketplace">
             <Button size="lg" className="mt-8">
-              {t("startRenting")}
+              {t('startRenting')}
             </Button>
           </Link>
         </div>
       </section>
     </div>
-  );
+  )
 }

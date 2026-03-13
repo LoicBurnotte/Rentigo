@@ -1,19 +1,19 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Inter } from 'next/font/google'
+import './globals.css'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export default async function RootLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
-  params: Promise<{ locale?: string }>;
+  children: React.ReactNode
+  params: Promise<{ locale?: string }>
 }) {
-  const { locale } = await params;
+  const { locale } = await params
 
   return (
-    <html lang={locale || "en"} suppressHydrationWarning>
+    <html lang={locale || 'en'} suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"
@@ -22,9 +22,7 @@ export default async function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className={`${inter.className} bg-gray-50 text-gray-900 antialiased`}>
-        {children}
-      </body>
+      <body className={`${inter.className} bg-gray-50 text-gray-900 antialiased`}>{children}</body>
     </html>
-  );
+  )
 }

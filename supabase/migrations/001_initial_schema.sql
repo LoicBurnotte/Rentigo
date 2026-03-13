@@ -3,9 +3,6 @@
 -- Peer-to-peer rental marketplace
 -- ============================================
 
--- Enable UUID generation
-create extension if not exists "uuid-ossp";
-
 -- ============================================
 -- TABLES
 -- ============================================
@@ -23,7 +20,7 @@ create table public.users (
 
 -- Categories
 create table public.categories (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   name text not null unique,
   slug text not null unique,
   icon text not null
@@ -31,7 +28,7 @@ create table public.categories (
 
 -- Items
 create table public.items (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   owner_id uuid not null references public.users(id) on delete cascade,
   title text not null,
   slug text not null unique,
@@ -50,7 +47,7 @@ create type booking_status as enum ('pending', 'confirmed', 'cancelled', 'comple
 
 -- Bookings
 create table public.bookings (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   item_id uuid not null references public.items(id) on delete cascade,
   renter_id uuid not null references public.users(id) on delete cascade,
   start_date date not null,
@@ -64,7 +61,7 @@ create table public.bookings (
 
 -- Favorites
 create table public.favorites (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.users(id) on delete cascade,
   item_id uuid not null references public.items(id) on delete cascade,
   created_at timestamptz default now() not null,
@@ -73,7 +70,7 @@ create table public.favorites (
 
 -- Conversations
 create table public.conversations (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   renter_id uuid not null references public.users(id) on delete cascade,
   owner_id uuid not null references public.users(id) on delete cascade,
   item_id uuid not null references public.items(id) on delete cascade,
@@ -83,7 +80,7 @@ create table public.conversations (
 
 -- Messages
 create table public.messages (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   conversation_id uuid not null references public.conversations(id) on delete cascade,
   sender_id uuid not null references public.users(id) on delete cascade,
   message text not null,
