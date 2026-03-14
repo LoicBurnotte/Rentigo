@@ -57,7 +57,7 @@ export function SearchFilters() {
   const [radius, setRadius] = useState(searchParams.get('radius') || '50')
 
   const locationWrapRef = useRef<HTMLDivElement>(null)
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>()
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   // Close suggestions dropdown on outside click
   useEffect(() => {
