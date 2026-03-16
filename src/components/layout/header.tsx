@@ -89,9 +89,12 @@ export function Header() {
           )}
         </div>
 
-        <button className="cursor-pointer md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher />
+          <button className="cursor-pointer" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {mobileMenuOpen && (
@@ -146,7 +149,6 @@ export function Header() {
               </>
             ) : (
               <div className="flex flex-col gap-2 pt-2">
-                <LanguageSwitcher />
                 <div className="flex gap-2">
                   <Link href="/auth/login" className="flex-1">
                     <Button variant="outline" className="w-full">

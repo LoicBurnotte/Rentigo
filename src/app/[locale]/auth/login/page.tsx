@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { useRouter } from '@/i18n/navigation'
@@ -8,13 +8,22 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createLoginSchema, type LoginInput } from '@/lib/validations'
 import { createClient } from '@/lib/supabase/client'
+import { useAuth } from '@/providers/auth-provider'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LogIn } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { user, loading } = useAuth()
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace('/')
+    }
+  }, [user, loading, router])
+
   const t = useTranslations('auth')
   const tv = useTranslations('validation')
   const tc = useTranslations('common')
@@ -43,6 +52,18 @@ export default function LoginPage() {
 
     router.push('/')
     router.refresh()
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center px-4">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
+      </div>
+    )
+  }
+
+  if (user) {
+    return null
   }
 
   return (

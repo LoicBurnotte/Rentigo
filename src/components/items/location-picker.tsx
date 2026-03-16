@@ -4,27 +4,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { MapContainer, TileLayer, Circle, useMap } from 'react-leaflet'
 import { Search, MapPin, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-
-export interface LocationValue {
-  latitude: number
-  longitude: number
-  city: string
-}
-
-interface NominatimResult {
-  place_id: number
-  display_name: string
-  lat: string
-  lon: string
-  address: {
-    city?: string
-    town?: string
-    village?: string
-    municipality?: string
-    county?: string
-    country?: string
-  }
-}
+import { NominatimResult, LocationValue } from '@/types/location'
 
 interface LocationPickerProps {
   value?: LocationValue
@@ -91,12 +71,12 @@ export function LocationPicker({ value, onChange, error }: LocationPickerProps) 
 
   const handleSelect = (result: NominatimResult) => {
     const city =
-      result.address.city ||
-      result.address.town ||
-      result.address.village ||
-      result.address.municipality ||
-      result.address.county ||
-      result.address.country ||
+      result.address?.city ||
+      result.address?.town ||
+      result.address?.village ||
+      result.address?.municipality ||
+      result.address?.county ||
+      result.address?.country ||
       ''
 
     // Show a concise label (street, city, country)

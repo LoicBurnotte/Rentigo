@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { routes } from '@/lib/routes'
 import type { User } from '@supabase/supabase-js'
 import type { Tables } from '@/types/database'
 
@@ -24,7 +25,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Tables<'users'> | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
-
   useEffect(() => {
     const getUser = async () => {
       const {
@@ -58,8 +58,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut()
-    setUser(null)
-    setProfile(null)
+    // Hard navigation bypasses React re-renders: without this, any mounted
+    // protected page sees user=null and races to redirect to login,
+    // overriding our intended destination.
+    window.location.href = routes.home
   }
 
   return <AuthContext.Provider value={{ user, profile, loading, signOut }}>{children}</AuthContext.Provider>

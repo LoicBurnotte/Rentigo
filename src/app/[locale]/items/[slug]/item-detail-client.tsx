@@ -7,6 +7,7 @@ import { Link, useRouter } from '@/i18n/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Heart, MessageCircle, ChevronLeft, ChevronRight, User, Share2, Pencil, Expand } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { RichTextContent } from '@/components/ui/rich-text-content'
 import { BookingForm } from '@/components/booking/booking-form'
 import { ImageLightbox } from '@/components/items/image-lightbox'
 import { useAuth } from '@/providers/auth-provider'
@@ -198,7 +199,9 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
 
             <div className="mt-6">
               <h2 className="text-lg font-semibold text-gray-900">{t('description')}</h2>
-              <p className="mt-2 whitespace-pre-wrap text-gray-600">{item.description}</p>
+              <div className="mt-2">
+                <RichTextContent html={item.description} />
+              </div>
             </div>
           </div>
 

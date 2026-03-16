@@ -72,7 +72,8 @@
     "outdoorGear": "Outdoor Gear",
     "eventEquipment": "Event Equipment",
     "electronics": "Electronics",
-    "sportsEquipment": "Sports Equipment"
+    "sportsEquipment": "Sports Equipment",
+    "other": "Other"
   },
   "marketplace": {
     "title": "Browse Marketplace",
@@ -88,6 +89,7 @@
     "noItems": "No items found",
     "noItemsHint": "Try adjusting your search or filters",
     "locationLabel": "Location",
+    "locationPlaceholder": "Search for a city, village or area...",
     "locationSearch": "Search for a city, village or area...",
     "radius": "Search radius",
     "radiusActive": "Showing items within {radius} km of {city}"
@@ -139,7 +141,15 @@
     "yourListings": "Your Listings",
     "yourBookings": "Your Bookings",
     "noBookings": "No bookings yet",
-    "yourListingsHint": "Manage, edit and delete your listings"
+    "yourListingsHint": "Manage, edit and delete your listings",
+    "loading": "Loading...",
+    "stripeConnectedDesc": "Your bank account is connected and ready to receive payments.",
+    "managePayoutAccount": "Manage payout account",
+    "locationNotFound": "No location found. Try a different search.",
+    "changeAvatar": "Change profile photo",
+    "avatarHint": "JPG, PNG or WebP · Max 5 MB",
+    "avatarTooLarge": "Image must be less than 5 MB",
+    "avatarUploadFailed": "Failed to upload photo"
   },
   "booking": {
     "startDate": "Start date",

@@ -270,28 +270,34 @@ export type Database = {
       users: {
         Row: {
           avatar_url: string | null
+          city: string | null
           created_at: string
           email: string
           id: string
-          location: string | null
+          latitude: number | null
+          longitude: number | null
           name: string
           stripe_account_id: string | null
         }
         Insert: {
           avatar_url?: string | null
+          city?: string | null
           created_at?: string
           email: string
           id: string
-          location?: string | null
+          latitude?: number | null
+          longitude?: number | null
           name: string
           stripe_account_id?: string | null
         }
         Update: {
           avatar_url?: string | null
+          city?: string | null
           created_at?: string
           email?: string
           id?: string
-          location?: string | null
+          latitude?: number | null
+          longitude?: number | null
           name?: string
           stripe_account_id?: string | null
         }

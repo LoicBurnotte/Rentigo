@@ -33,7 +33,7 @@ export function createItemSchema(t: T) {
 export function createProfileSchema(t: T) {
   return z.object({
     name: z.string().min(2, t('nameMin')),
-    location: z.string().optional(),
+    // Location is managed via SearchLocation state, not a form field
   })
 }
 

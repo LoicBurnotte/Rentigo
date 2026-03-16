@@ -72,7 +72,8 @@
     "outdoorGear": "Outdoor uitrusting",
     "eventEquipment": "Evenement uitrusting",
     "electronics": "Elektronica",
-    "sportsEquipment": "Sportuitrusting"
+    "sportsEquipment": "Sportuitrusting",
+    "other": "Overig"
   },
   "marketplace": {
     "title": "Marktplaats bladeren",
@@ -88,6 +89,7 @@
     "noItems": "Geen artikelen gevonden",
     "noItemsHint": "Probeer uw zoekopdracht of filters aan te passen",
     "locationLabel": "Locatie",
+    "locationPlaceholder": "Zoek een stad, dorp of wijk...",
     "locationSearch": "Zoek een stad, dorp of wijk...",
     "radius": "Zoekradius",
     "radiusActive": "Advertenties binnen {radius} km van {city}"
@@ -139,7 +141,15 @@
     "yourListings": "Uw advertenties",
     "yourBookings": "Uw boekingen",
     "noBookings": "Nog geen boekingen",
-    "yourListingsHint": "Beheer, bewerk en verwijder uw advertenties"
+    "yourListingsHint": "Beheer, bewerk en verwijder uw advertenties",
+    "loading": "Laden...",
+    "stripeConnectedDesc": "Uw bankrekening is gekoppeld en klaar om betalingen te ontvangen.",
+    "managePayoutAccount": "Uitbetalingsaccount beheren",
+    "locationNotFound": "Geen locatie gevonden. Probeer een andere zoekopdracht.",
+    "changeAvatar": "Profielfoto wijzigen",
+    "avatarHint": "JPG, PNG of WebP · Max 5 MB",
+    "avatarTooLarge": "Afbeelding moet kleiner zijn dan 5 MB",
+    "avatarUploadFailed": "Foto uploaden mislukt"
   },
   "booking": {
     "startDate": "Startdatum",

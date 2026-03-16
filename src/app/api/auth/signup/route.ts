@@ -10,10 +10,13 @@ export async function POST(request: Request) {
 
     if (type === 'INSERT' && record) {
       const supabase = await createServiceRoleClient()
+      const name = record.raw_user_meta_data?.name || 'User'
+      const avatarUrl = `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=059669&fontColor=ffffff`
       const { error } = await supabase.from('users').insert({
         id: record.id,
         email: record.email,
-        name: record.raw_user_meta_data?.name || 'User',
+        name,
+        avatar_url: avatarUrl,
       })
 
       if (error) {

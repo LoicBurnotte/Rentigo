@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { useRouter } from '@/i18n/navigation'
@@ -14,8 +14,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { PageLoading } from '@/components/ui/loading'
+import { LanguageSwitcher } from '@/components/layout/language-switcher'
+import { AvatarUpload } from '@/components/profile/avatar-upload'
 import { formatCurrency, formatDate } from '@/lib/utils'
-import { User, CreditCard, Package, Calendar, ChevronRight, Plus } from 'lucide-react'
+import { CreditCard, Package, Calendar, ChevronRight, Plus, ExternalLink } from 'lucide-react'
+import { SearchLocation } from '@/components/search/search-location'
+import type { SelectedLocation } from '@/types/location'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -23,8 +27,26 @@ export default function ProfilePage() {
   const { data: bookings } = useBookings(user?.id)
   const [editing, setEditing] = useState(false)
   const [stripeLoading, setStripeLoading] = useState(false)
+  const [stripeDashboardLoading, setStripeDashboardLoading] = useState(false)
+  const [location, setLocation] = useState<SelectedLocation | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const t = useTranslations('profile')
+
+  // Sync location from profile when profile loads or when leaving edit mode (so chip shows current value)
+  useEffect(() => {
+    if (!profile) return
+    if (profile.city && profile.latitude != null && profile.longitude != null) {
+      setLocation({
+        display: profile.city,
+        lat: String(profile.latitude),
+        lng: String(profile.longitude),
+      })
+    } else {
+      setLocation(null)
+    }
+  }, [profile])
+
   const tv = useTranslations('validation')
   const ts = useTranslations('bookingStatus')
   const tc = useTranslations('common')
@@ -37,7 +59,6 @@ export default function ProfilePage() {
     resolver: zodResolver(createProfileSchema(tv)),
     defaultValues: {
       name: profile?.name || '',
-      location: profile?.location || '',
     },
   })
 
@@ -49,12 +70,33 @@ export default function ProfilePage() {
 
   const onSubmit = async (data: ProfileInput) => {
     const supabase = createClient()
-    const { error } = await supabase.from('users').update(data).eq('id', user.id)
+    const { error } = await supabase
+      .from('users')
+      .update({
+        name: data.name,
+        city: location?.display || null,
+        latitude: location?.lat ? parseFloat(location.lat) : null,
+        longitude: location?.lng ? parseFloat(location.lng) : null,
+      })
+      .eq('id', user.id)
 
     if (!error) {
       setEditing(false)
       setSuccessMsg(t('profileUpdated'))
       setTimeout(() => setSuccessMsg(null), 3000)
+    }
+  }
+
+  const openStripeDashboard = async () => {
+    setStripeDashboardLoading(true)
+    try {
+      const res = await fetch('/api/stripe/dashboard', { method: 'POST' })
+      const data = await res.json()
+      if (data.url) window.open(data.url, '_blank')
+    } catch {
+      // handle error
+    } finally {
+      setStripeDashboardLoading(false)
     }
   }
 
@@ -73,19 +115,25 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+        <LanguageSwitcher />
+      </div>
 
       {/* Profile Info */}
       <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-              <User size={32} className="text-emerald-600" />
-            </div>
+          <div className="flex items-center gap-5">
+            <AvatarUpload
+              userId={user.id}
+              avatarUrl={avatarUrl}
+              name={profile?.name || 'User'}
+              onUpload={setAvatarUrl}
+            />
             <div>
               <h2 className="text-xl font-bold text-gray-900">{profile?.name}</h2>
               <p className="text-sm text-gray-500">{profile?.email}</p>
-              {profile?.location && <p className="text-sm text-gray-500">{profile.location}</p>}
+              {profile?.city && <p className="text-sm text-gray-500">{profile.city}</p>}
             </div>
           </div>
           <Button variant="outline" size="sm" onClick={() => setEditing(!editing)}>
@@ -96,12 +144,11 @@ export default function ProfilePage() {
         {editing && (
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
             <Input id="name" label={t('name')} error={errors.name?.message} {...register('name')} />
-            <Input
-              id="location"
+            <SearchLocation
               label={t('location')}
+              value={location}
+              onChange={setLocation}
               placeholder={t('locationPlaceholder')}
-              error={errors.location?.message}
-              {...register('location')}
             />
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? t('saving') : t('saveChanges')}
@@ -119,7 +166,22 @@ export default function ProfilePage() {
           {t('paymentSetup')}
         </h3>
         {profile?.stripe_account_id ? (
-          <p className="mt-2 text-sm text-emerald-600">{t('stripeConnected')}</p>
+          <div className="mt-3">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              <p className="text-sm font-medium text-emerald-700">{t('stripeConnected')}</p>
+            </div>
+            <p className="mt-1 text-sm text-gray-500">{t('stripeConnectedDesc')}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={openStripeDashboard}
+              disabled={stripeDashboardLoading}>
+              <ExternalLink size={14} className="mr-2" />
+              {stripeDashboardLoading ? t('connecting') : t('managePayoutAccount')}
+            </Button>
+          </div>
         ) : (
           <div className="mt-2">
             <p className="text-sm text-gray-500">{t('stripeSetupText')}</p>

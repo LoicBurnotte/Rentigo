@@ -13,17 +13,21 @@ import { useCreateItem } from '@/hooks/use-items'
 import { createSlug } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { ImageUpload } from '@/components/items/image-upload'
 import { PageLoading } from '@/components/ui/loading'
 import { Plus } from 'lucide-react'
 import type { Category } from '@/types'
-import type { LocationValue } from '@/components/items/location-picker'
+import type { LocationValue } from '@/types/location'
 
 const LocationPicker = dynamic(() => import('@/components/items/location-picker').then((mod) => mod.LocationPicker), {
   ssr: false,
   loading: () => <div className="h-10 animate-pulse rounded-lg bg-gray-100" />,
+})
+
+const RichTextEditor = dynamic(() => import('@/components/ui/rich-text-editor').then((mod) => mod.RichTextEditor), {
+  ssr: false,
+  loading: () => <div className="h-48 animate-pulse rounded-lg bg-gray-100" />,
 })
 
 export default function NewItemPage() {
@@ -113,12 +117,11 @@ export default function NewItemPage() {
           {...register('title')}
         />
 
-        <Textarea
-          id="description"
+        <RichTextEditor
           label={t('descriptionLabel')}
           placeholder={t('descriptionPlaceholder')}
           error={errors.description?.message}
-          {...register('description')}
+          onChange={(html) => setValue('description', html, { shouldValidate: true })}
         />
 
         <div className="grid gap-4 sm:grid-cols-2">

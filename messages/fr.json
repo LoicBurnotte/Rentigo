@@ -72,7 +72,8 @@
     "outdoorGear": "Équipement outdoor",
     "eventEquipment": "Équipement événementiel",
     "electronics": "Électronique",
-    "sportsEquipment": "Équipement sportif"
+    "sportsEquipment": "Équipement sportif",
+    "other": "Autre"
   },
   "marketplace": {
     "title": "Explorer le marketplace",
@@ -88,6 +89,7 @@
     "noItems": "Aucun article trouvé",
     "noItemsHint": "Essayez de modifier votre recherche ou vos filtres",
     "locationLabel": "Localisation",
+    "locationPlaceholder": "Rechercher une ville, un village ou un quartier...",
     "locationSearch": "Rechercher une ville, un village ou un quartier...",
     "radius": "Rayon de recherche",
     "radiusActive": "Annonces à moins de {radius} km de {city}"
@@ -126,7 +128,7 @@
   "profile": {
     "title": "Votre profil",
     "name": "Nom",
-    "location": "Localisation",
+    "location": "Addresse",
     "locationPlaceholder": "ex. Bruxelles, Belgique",
     "saving": "Enregistrement...",
     "saveChanges": "Enregistrer les modifications",
@@ -139,7 +141,15 @@
     "yourListings": "Vos annonces",
     "yourBookings": "Vos réservations",
     "noBookings": "Aucune réservation pour le moment",
-    "yourListingsHint": "Gérez, modifiez et supprimez vos annonces"
+    "yourListingsHint": "Gérez, modifiez et supprimez vos annonces",
+    "loading": "Chargement...",
+    "stripeConnectedDesc": "Votre compte bancaire est connecté et prêt à recevoir des paiements.",
+    "managePayoutAccount": "Gérer le compte de paiement",
+    "locationNotFound": "Aucun lieu trouvé. Essayez une autre recherche.",
+    "changeAvatar": "Modifier la photo de profil",
+    "avatarHint": "JPG, PNG ou WebP · Max 5 Mo",
+    "avatarTooLarge": "L'image doit faire moins de 5 Mo",
+    "avatarUploadFailed": "Échec du téléchargement de la photo"
   },
   "booking": {
     "startDate": "Date de début",
@@ -170,7 +180,7 @@
     "category": "Catégorie",
     "selectCategory": "Sélectionnez une catégorie",
     "pricePerDay": "Prix par jour (EUR)",
-    "searchAddress": "Localisation",
+    "searchAddress": "Addresse",
     "addressPlaceholder": "Tapez une adresse pour rechercher...",
     "addressSearching": "Recherche en cours...",
     "noAddressFound": "Aucune adresse trouvée. Essayez une autre recherche.",

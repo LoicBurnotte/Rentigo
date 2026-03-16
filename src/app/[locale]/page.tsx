@@ -105,14 +105,18 @@ export default function HomePage() {
           {FEATURED_CATEGORIES.map((cat) => {
             const IconComponent = CATEGORY_ICONS[cat.icon as keyof typeof CATEGORY_ICONS]
             return (
-              <motion.div key={cat.slug} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div key={cat.slug} className="h-full" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href={`/marketplace?category=${cat.slug}`}
-                  className="flex flex-col min-h-[150px] items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${cat.color}`}>
+                  className="flex h-full flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${cat.color}`}>
                     <IconComponent size={24} />
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{tc(cat.nameKey)}</span>
+                  <span
+                    className="line-clamp-2 w-full min-w-0 text-center text-sm font-medium text-gray-900"
+                    title={tc(cat.nameKey)}>
+                    {tc(cat.nameKey)}
+                  </span>
                 </Link>
               </motion.div>
             )

@@ -82,6 +82,7 @@ export function getCategoryTranslationKey(slug: string): string {
     'event-equipment': 'eventEquipment',
     electronics: 'electronics',
     'sports-equipment': 'sportsEquipment',
+    other: 'other',
   }
   return map[slug] ?? slug
 }

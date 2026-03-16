@@ -22,7 +22,9 @@ export default async function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className={`${inter.className} bg-gray-50 text-gray-900 antialiased`}>{children}</body>
+      <body className={`${inter.className} bg-gray-50 text-gray-900 antialiased`} suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   )
 }

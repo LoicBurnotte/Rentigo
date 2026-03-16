@@ -9,15 +9,26 @@ export function GlobalFetchingIndicator() {
   const isFetching = useIsFetching()
   const [phase, setPhase] = useState<Phase>('idle')
 
+  // Effect 1: isFetching → phase transition.
+  // Uses functional setState so we never capture a stale `phase` in the
+  // closure — the updater callback always receives the current state.
   useEffect(() => {
     if (isFetching > 0) {
       setPhase('loading')
-    } else if (phase === 'loading') {
-      setPhase('completing')
-      const t = setTimeout(() => setPhase('idle'), 650)
-      return () => clearTimeout(t)
+    } else {
+      // Only advance to 'completing' when we were actively loading.
+      // Keeps 'idle' and 'completing' phases untouched.
+      setPhase((prev) => (prev === 'loading' ? 'completing' : prev))
     }
-  }, [isFetching]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isFetching])
+
+  // Effect 2: completing → idle after the CSS animations finish
+  // (0.25s width snap + 0.4s fade with 0.25s delay = 0.65s total).
+  useEffect(() => {
+    if (phase !== 'completing') return
+    const t = setTimeout(() => setPhase('idle'), 650)
+    return () => clearTimeout(t)
+  }, [phase])
 
   if (phase === 'idle') return null
 

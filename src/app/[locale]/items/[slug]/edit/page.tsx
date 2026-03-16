@@ -13,17 +13,21 @@ import { useAuth } from '@/providers/auth-provider'
 import { useUpdateItem } from '@/hooks/use-items'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { ImageUpload } from '@/components/items/image-upload'
 import { PageLoading } from '@/components/ui/loading'
 import { Save } from 'lucide-react'
 import type { Category, ItemWithOwner } from '@/types'
-import type { LocationValue } from '@/components/items/location-picker'
+import type { LocationValue } from '@/types/location'
 
 const LocationPicker = dynamic(() => import('@/components/items/location-picker').then((mod) => mod.LocationPicker), {
   ssr: false,
   loading: () => <div className="h-10 animate-pulse rounded-lg bg-gray-100" />,
+})
+
+const RichTextEditor = dynamic(() => import('@/components/ui/rich-text-editor').then((mod) => mod.RichTextEditor), {
+  ssr: false,
+  loading: () => <div className="h-48 animate-pulse rounded-lg bg-gray-100" />,
 })
 
 export default function EditItemPage() {
@@ -37,6 +41,7 @@ export default function EditItemPage() {
   const [item, setItem] = useState<ItemWithOwner | null>(null)
   const [location, setLocation] = useState<LocationValue | undefined>()
   const [locationError, setLocationError] = useState<string | null>(null)
+  const [descriptionHtml, setDescriptionHtml] = useState<string>('')
   const [fetchLoading, setFetchLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const t = useTranslations('editItem')
@@ -71,6 +76,7 @@ export default function EditItemPage() {
         const itemData = itemRes.data as unknown as ItemWithOwner
         setItem(itemData)
         setImages(itemData.images ?? [])
+        setDescriptionHtml(itemData.description ?? '')
 
         const loc: LocationValue = {
           latitude: itemData.latitude,
@@ -155,12 +161,15 @@ export default function EditItemPage() {
           {...register('title')}
         />
 
-        <Textarea
-          id="description"
+        <RichTextEditor
           label={tn('descriptionLabel')}
           placeholder={tn('descriptionPlaceholder')}
           error={errors.description?.message}
-          {...register('description')}
+          value={descriptionHtml}
+          onChange={(html) => {
+            setDescriptionHtml(html)
+            setValue('description', html, { shouldValidate: true })
+          }}
         />
 
         <div className="grid gap-4 sm:grid-cols-2">
