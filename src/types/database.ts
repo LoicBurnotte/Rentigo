@@ -168,6 +168,38 @@ export type Database = {
           },
         ]
       }
+      item_unavailabilities: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          item_id: string
+          start_date: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          item_id: string
+          start_date: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          item_id?: string
+          start_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_unavailabilities_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       items: {
         Row: {
           category_id: string
@@ -176,6 +208,7 @@ export type Database = {
           description: string
           id: string
           images: string[] | null
+          is_paused: boolean
           latitude: number
           longitude: number
           owner_id: string
@@ -190,6 +223,7 @@ export type Database = {
           description: string
           id?: string
           images?: string[] | null
+          is_paused?: boolean
           latitude: number
           longitude: number
           owner_id: string
@@ -204,6 +238,7 @@ export type Database = {
           description?: string
           id?: string
           images?: string[] | null
+          is_paused?: boolean
           latitude?: number
           longitude?: number
           owner_id?: string
@@ -274,6 +309,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          is_paused: boolean
           latitude: number | null
           longitude: number | null
           name: string
@@ -285,6 +321,7 @@ export type Database = {
           created_at?: string
           email: string
           id: string
+          is_paused?: boolean
           latitude?: number | null
           longitude?: number | null
           name: string
@@ -296,6 +333,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          is_paused?: boolean
           latitude?: number | null
           longitude?: number | null
           name?: string

@@ -61,17 +61,17 @@ export function ImageUpload({ images, onChange, maxImages = 5 }: ImageUploadProp
 
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium text-gray-700">
+      <label className="mb-1.5 block text-sm font-medium text-text-secondary">
         {t('photos')} (max {maxImages})
       </label>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
         {images.map((image, index) => (
-          <div key={image} className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200">
+          <div key={image} className="group relative aspect-square overflow-hidden rounded-lg border border-border">
             <Image src={getImageUrl(image)} alt={`Upload ${index + 1}`} fill className="object-cover" />
 
             {/* Thumbnail badge */}
             {index === 0 && (
-              <div className="absolute left-1 top-1 flex items-center gap-0.5 rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-medium text-white">
+              <div className="absolute left-1 top-1 flex items-center gap-0.5 rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] font-medium text-white">
                 <Star size={10} className="fill-white" />
                 {t('thumbnailBadge')}
               </div>
@@ -83,7 +83,7 @@ export function ImageUpload({ images, onChange, maxImages = 5 }: ImageUploadProp
                 type="button"
                 onClick={() => setAsThumbnail(index)}
                 title={t('setThumbnail')}
-                className="absolute left-1 top-1 hidden cursor-pointer items-center gap-0.5 rounded-full bg-white/90 px-1.5 py-0.5 text-[10px] font-medium text-gray-700 shadow hover:bg-white group-hover:flex">
+                className="absolute left-1 top-1 hidden cursor-pointer items-center gap-0.5 rounded-full bg-surface/90 px-1.5 py-0.5 text-[10px] font-medium text-text-secondary shadow hover:bg-surface group-hover:flex">
                 <Star size={10} />
                 {t('setThumbnail')}
               </button>
@@ -99,9 +99,9 @@ export function ImageUpload({ images, onChange, maxImages = 5 }: ImageUploadProp
         ))}
 
         {images.length < maxImages && (
-          <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 hover:border-emerald-500 hover:bg-emerald-50/50">
-            <Upload size={24} className="text-gray-400" />
-            <span className="mt-1 text-xs text-gray-500">{uploading ? t('uploading') : t('upload')}</span>
+          <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border hover:border-orange-500 hover:bg-orange-50/50">
+            <Upload size={24} className="text-text-muted" />
+            <span className="mt-1 text-xs text-text-secondary">{uploading ? t('uploading') : t('upload')}</span>
             <input
               type="file"
               accept="image/*"

@@ -12,12 +12,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'inline-flex cursor-pointer items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:pointer-events-none disabled:opacity-50',
+          'inline-flex cursor-pointer items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 disabled:pointer-events-none disabled:opacity-50',
           {
-            'bg-emerald-600 text-white hover:bg-emerald-700': variant === 'primary',
-            'bg-gray-100 text-gray-900 hover:bg-gray-200': variant === 'secondary',
-            'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50': variant === 'outline',
-            'text-gray-700 hover:bg-gray-100': variant === 'ghost',
+            'bg-orange-600 text-white hover:bg-orange-700': variant === 'primary',
+            'bg-surface-alt text-text hover:bg-surface-alt': variant === 'secondary',
+            'border border-border bg-surface text-text-secondary hover:bg-surface-alt': variant === 'outline',
+            'text-text-secondary hover:bg-surface-alt': variant === 'ghost',
             'bg-red-600 text-white hover:bg-red-700': variant === 'danger',
           },
           {

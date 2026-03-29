@@ -1,18 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { useRouter } from '@/i18n/navigation'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter, usePathname } from '@/i18n/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { DateRangePicker } from '@/components/ui/date-range-picker'
 import { useAuth } from '@/providers/auth-provider'
-import { useCreateBooking, useItemBookings } from '@/hooks/use-bookings'
+import { useCreateBooking, useItemBookings, useItemUnavailabilities } from '@/hooks/use-bookings'
 import { calculateTotalPrice, formatCurrency } from '@/lib/utils'
-import { Calendar, CreditCard } from 'lucide-react'
-import type { Item } from '@/types'
+import { Calendar, CreditCard, PauseCircle } from 'lucide-react'
+import type { ItemWithOwner } from '@/types'
 
 const bookingFormSchema = z
   .object({
@@ -27,15 +27,18 @@ const bookingFormSchema = z
 type BookingFormValues = z.infer<typeof bookingFormSchema>
 
 interface BookingFormProps {
-  item: Item
+  item: ItemWithOwner
 }
 
 export function BookingForm({ item }: BookingFormProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const { user } = useAuth()
   const createBooking = useCreateBooking()
   const { data: existingBookings } = useItemBookings(item.id)
+  const { data: unavailabilities } = useItemUnavailabilities(item.id)
   const [error, setError] = useState<string | null>(null)
+  const locale = useLocale()
   const t = useTranslations('booking')
   const tc = useTranslations('common')
 
@@ -55,10 +58,13 @@ export function BookingForm({ item }: BookingFormProps) {
   const totalPrice = startDate && endDate ? calculateTotalPrice(item.price_per_day, startDate, endDate) : 0
 
   const isDateConflict = (start: string, end: string) => {
-    if (!existingBookings) return false
-    return existingBookings.some((booking) => {
-      const bStart = new Date(booking.start_date)
-      const bEnd = new Date(booking.end_date)
+    const allBlocked = [
+      ...(existingBookings ?? []),
+      ...(unavailabilities ?? []),
+    ]
+    return allBlocked.some((range) => {
+      const bStart = new Date(range.start_date)
+      const bEnd = new Date(range.end_date)
       const rStart = new Date(start)
       const rEnd = new Date(end)
       return rStart < bEnd && rEnd > bStart
@@ -67,7 +73,7 @@ export function BookingForm({ item }: BookingFormProps) {
 
   const onSubmit = async (data: BookingFormValues) => {
     if (!user) {
-      router.push('/auth/login')
+      router.push(`/auth/login?returnTo=${encodeURIComponent(pathname)}`)
       return
     }
 
@@ -89,6 +95,7 @@ export function BookingForm({ item }: BookingFormProps) {
         start_date: data.start_date,
         end_date: data.end_date,
         total_price: totalPrice,
+        locale,
       })
 
       if (result.checkoutUrl) {
@@ -101,28 +108,41 @@ export function BookingForm({ item }: BookingFormProps) {
     }
   }
 
-  const bookedRanges = (existingBookings ?? []).map((b) => ({
-    start: b.start_date,
-    end: b.end_date,
-  }))
+  const bookedRanges = [
+    ...(existingBookings ?? []).map((b) => ({ start: b.start_date, end: b.end_date })),
+    ...(unavailabilities ?? []).map((u) => ({ start: u.start_date, end: u.end_date })),
+  ]
+
+  const isPaused = item.is_paused || item.owner?.is_paused
 
   const dayCount =
     startDate && endDate
       ? Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))
       : 0
 
+  if (isPaused) {
+    return (
+      <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
+        <div className="flex flex-col items-center py-6 text-center">
+          <PauseCircle size={40} className="text-gray-300" />
+          <p className="mt-3 font-medium text-text-secondary">{t('itemUnavailable')}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
       <div className="mb-5 flex items-baseline justify-between">
         <div>
-          <span className="text-2xl font-bold text-gray-900">{formatCurrency(item.price_per_day)}</span>
-          <span className="text-gray-500"> {tc('perDay')}</span>
+          <span className="text-2xl font-bold text-text">{formatCurrency(item.price_per_day)}</span>
+          <span className="text-text-secondary"> {tc('perDay')}</span>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Calendar */}
-        <div className="rounded-xl border border-gray-200 p-3">
+        <div className="rounded-xl border border-border p-3">
           <DateRangePicker
             startDate={startDate || null}
             endDate={endDate || null}
@@ -141,16 +161,16 @@ export function BookingForm({ item }: BookingFormProps) {
 
         {/* Price breakdown */}
         {totalPrice > 0 && (
-          <div className="rounded-lg bg-gray-50 p-4">
+          <div className="rounded-lg bg-page-alt p-4">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">
+              <span className="text-text-secondary">
                 {formatCurrency(item.price_per_day)} × {dayCount} {tc('days')}
               </span>
               <span className="font-medium">{formatCurrency(totalPrice)}</span>
             </div>
-            <div className="mt-2 flex items-center justify-between border-t border-gray-200 pt-2">
-              <span className="font-semibold text-gray-900">{tc('total')}</span>
-              <span className="text-lg font-bold text-emerald-600">{formatCurrency(totalPrice)}</span>
+            <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
+              <span className="font-semibold text-text">{tc('total')}</span>
+              <span className="text-lg font-bold text-orange-600">{formatCurrency(totalPrice)}</span>
             </div>
           </div>
         )}
@@ -168,18 +188,18 @@ export function BookingForm({ item }: BookingFormProps) {
           )}
         </Button>
 
-        <p className="text-center text-xs text-gray-500">{t('securePayment')}</p>
+        <p className="text-center text-xs text-text-secondary">{t('securePayment')}</p>
       </form>
 
       {existingBookings && existingBookings.length > 0 && (
-        <div className="mt-4 border-t border-gray-200 pt-4">
-          <h4 className="mb-2 flex items-center gap-1.5 text-sm font-medium text-gray-700">
+        <div className="mt-4 border-t border-border pt-4">
+          <h4 className="mb-2 flex items-center gap-1.5 text-sm font-medium text-text-secondary">
             <Calendar size={14} />
             {t('unavailableDates')}
           </h4>
           <div className="space-y-1">
             {existingBookings.map((booking, i) => (
-              <p key={i} className="text-xs text-gray-500">
+              <p key={i} className="text-xs text-text-secondary">
                 {new Date(booking.start_date).toLocaleDateString()} – {new Date(booking.end_date).toLocaleDateString()}
               </p>
             ))}

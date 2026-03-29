@@ -7,9 +7,10 @@ export type Favorite = Tables<'favorites'>
 export type Conversation = Tables<'conversations'>
 export type Message = Tables<'messages'>
 export type Category = Tables<'categories'>
+export type ItemUnavailability = Tables<'item_unavailabilities'>
 
 export type ItemWithOwner = Item & {
-  owner: Pick<User, 'id' | 'name' | 'avatar_url'>
+  owner: Pick<User, 'id' | 'name' | 'avatar_url' | 'is_paused'>
   category: Category
 }
 

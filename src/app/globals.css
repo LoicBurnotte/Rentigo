@@ -1,16 +1,66 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * ─── CENTRALIZED COLOR TOKENS ───
+ * Change these to rebrand the entire app.
+ * Light theme = :root, Dark theme = .dark
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Page */
+  --color-page:        #ffffff;
+  --color-page-alt:    #f9fafb;   /* gray-50  — subtle section bg */
+  /* Surfaces (cards, modals, inputs) */
+  --color-surface:     #ffffff;
+  --color-surface-alt: #f3f4f6;   /* gray-100 — hover / secondary bg */
+  /* Text */
+  --color-text:        #111827;   /* gray-900 */
+  --color-text-secondary: #6b7280; /* gray-500 */
+  --color-text-muted:  #9ca3af;   /* gray-400 */
+  /* Borders */
+  --color-border:      #e5e7eb;   /* gray-200 */
+  --color-border-light:#f3f4f6;   /* gray-100 */
+  /* Brand / Primary — orange / terracotta */
+  --color-primary:     #ea580c;   /* orange-600 */
+  --color-primary-hover:#c2410c;  /* orange-700 */
+  --color-primary-light:#fff7ed;  /* orange-50  */
+  --color-primary-100: #ffedd5;   /* orange-100 */
+  --color-primary-text:#9a3412;   /* orange-800 */
+
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --color-page:        #0f172a;   /* slate-900 */
+  --color-page-alt:    #0f172a;
+  --color-surface:     #1e293b;   /* slate-800 */
+  --color-surface-alt: #334155;   /* slate-700 */
+  --color-text:        #f1f5f9;   /* slate-100 */
+  --color-text-secondary: #94a3b8; /* slate-400 */
+  --color-text-muted:  #64748b;   /* slate-500 */
+  --color-border:      #334155;   /* slate-700 */
+  --color-border-light:#334155;
+  --color-primary:     #ea580c;
+  --color-primary-hover:#c2410c;
+  --color-primary-light:#1c1917;  /* dark tinted bg */
+  --color-primary-100: #431407;   /* orange-950 */
+  --color-primary-text:#fdba74;   /* orange-300 */
+
+  color-scheme: dark;
+}
+
+@theme {
+  --color-page:        var(--color-page);
+  --color-page-alt:    var(--color-page-alt);
+  --color-surface:     var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-text:        var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted:  var(--color-text-muted);
+  --color-border:      var(--color-border);
+  --color-border-light:var(--color-border-light);
 }
 
 /* Ensure all interactive elements show pointer cursor */

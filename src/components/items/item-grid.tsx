@@ -26,8 +26,8 @@ export function ItemGrid({ items, isLoading }: ItemGridProps) {
   if (!items?.length) {
     return (
       <div className="py-12 text-center">
-        <p className="text-lg text-gray-500">{t('noItems')}</p>
-        <p className="mt-1 text-sm text-gray-400">{t('noItemsHint')}</p>
+        <p className="text-lg text-text-secondary">{t('noItems')}</p>
+        <p className="mt-1 text-sm text-text-muted">{t('noItemsHint')}</p>
       </div>
     )
   }

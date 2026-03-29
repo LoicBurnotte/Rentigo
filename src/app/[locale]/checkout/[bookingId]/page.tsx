@@ -32,7 +32,7 @@ export default function CheckoutPage({ params }: Props) {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 size={32} className="animate-spin text-emerald-600" />
+        <Loader2 size={32} className="animate-spin text-orange-600" />
       </div>
     )
   }
@@ -42,7 +42,7 @@ export default function CheckoutPage({ params }: Props) {
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center">
           <XCircle size={48} className="mx-auto text-red-500" />
-          <h2 className="mt-4 text-xl font-bold text-gray-900">{t('bookingNotFound')}</h2>
+          <h2 className="mt-4 text-xl font-bold text-text">{t('bookingNotFound')}</h2>
           <Link href="/marketplace">
             <Button className="mt-4">{t('browseMarketplace')}</Button>
           </Link>
@@ -58,27 +58,27 @@ export default function CheckoutPage({ params }: Props) {
     <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="w-full max-w-md text-center">
         {isConfirmed ? (
-          <CheckCircle size={64} className="mx-auto text-emerald-500" />
+          <CheckCircle size={64} className="mx-auto text-orange-500" />
         ) : (
           <Loader2 size={64} className="mx-auto animate-spin text-yellow-500" />
         )}
-        <h1 className="mt-6 text-2xl font-bold text-gray-900">
+        <h1 className="mt-6 text-2xl font-bold text-text">
           {isConfirmed ? t('bookingConfirmed') : t('paymentProcessing')}
         </h1>
-        <p className="mt-2 text-gray-500">{isConfirmed ? t('confirmedText') : t('processingText')}</p>
+        <p className="mt-2 text-text-secondary">{isConfirmed ? t('confirmedText') : t('processingText')}</p>
 
-        <div className="mt-6 rounded-xl border border-gray-200 bg-white p-6 text-left shadow-sm">
-          <h3 className="font-semibold text-gray-900">{item?.title}</h3>
-          <div className="mt-3 space-y-2 text-sm text-gray-600">
+        <div className="mt-6 rounded-xl border border-border bg-surface p-6 text-left shadow-sm">
+          <h3 className="font-semibold text-text">{item?.title}</h3>
+          <div className="mt-3 space-y-2 text-sm text-text-secondary">
             <div className="flex justify-between">
               <span>{tc('dates')}</span>
               <span>
                 {formatDate(booking.start_date as string)} - {formatDate(booking.end_date as string)}
               </span>
             </div>
-            <div className="flex justify-between border-t border-gray-100 pt-2">
+            <div className="flex justify-between border-t border-border-light pt-2">
               <span className="font-medium">{tc('total')}</span>
-              <span className="font-semibold text-emerald-600">{formatCurrency(booking.total_price as number)}</span>
+              <span className="font-semibold text-orange-600">{formatCurrency(booking.total_price as number)}</span>
             </div>
           </div>
         </div>

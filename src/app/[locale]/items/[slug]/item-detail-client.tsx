@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { Link, useRouter } from '@/i18n/navigation'
+import { Link, useRouter, usePathname } from '@/i18n/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Heart, MessageCircle, ChevronLeft, ChevronRight, User, Share2, Pencil, Expand } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -22,6 +22,7 @@ interface ItemDetailClientProps {
 
 export function ItemDetailClient({ item }: ItemDetailClientProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const { user } = useAuth()
   const { data: favoriteIds } = useFavoriteIds(user?.id)
   const toggleFavorite = useToggleFavorite()
@@ -35,7 +36,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
   const isFavorited = favoriteIds?.has(item.id) ?? false
 
   const handleToggleFavorite = () => {
-    if (!user) return router.push('/auth/login')
+    if (!user) return router.push(`/auth/login?returnTo=${encodeURIComponent(pathname)}`)
     toggleFavorite.mutate({
       itemId: item.id,
       userId: user.id,
@@ -44,7 +45,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
   }
 
   const handleContact = async () => {
-    if (!user) return router.push('/auth/login')
+    if (!user) return router.push(`/auth/login?returnTo=${encodeURIComponent(pathname)}`)
     const conversation = await createConversation.mutateAsync({
       renterId: user.id,
       ownerId: item.owner.id,
@@ -64,7 +65,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
         <div className="space-y-6 lg:col-span-2">
           {/* Image Gallery */}
           {images.length > 0 ? (
-            <div className="relative overflow-hidden rounded-xl bg-gray-100">
+            <div className="relative overflow-hidden rounded-xl bg-surface-alt">
               {/* Main image — clickable to open lightbox */}
               <div className="group relative aspect-16/10 cursor-pointer" onClick={() => setLightboxOpen(true)}>
                 <AnimatePresence mode="wait">
@@ -104,7 +105,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
                         e.stopPropagation()
                         setCurrentImage((p) => p - 1)
                       }}
-                      className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/80 shadow-md backdrop-blur-sm hover:bg-white">
+                      className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-surface/80 shadow-md backdrop-blur-sm hover:bg-surface">
                       <ChevronLeft size={20} />
                     </button>
                   )}
@@ -114,7 +115,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
                         e.stopPropagation()
                         setCurrentImage((p) => p + 1)
                       }}
-                      className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/80 shadow-md backdrop-blur-sm hover:bg-white">
+                      className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-surface/80 shadow-md backdrop-blur-sm hover:bg-surface">
                       <ChevronRight size={20} />
                     </button>
                   )}
@@ -129,7 +130,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
                           setCurrentImage(i)
                         }}
                         className={`h-2 w-2 cursor-pointer rounded-full transition-colors ${
-                          i === currentImage ? 'bg-white' : 'bg-white/50'
+                          i === currentImage ? 'bg-surface' : 'bg-surface/50'
                         }`}
                       />
                     ))}
@@ -138,7 +139,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
               )}
             </div>
           ) : (
-            <div className="flex aspect-16/10 items-center justify-center rounded-xl bg-gray-100 text-gray-400">
+            <div className="flex aspect-16/10 items-center justify-center rounded-xl bg-surface-alt text-text-muted">
               {t('noImages')}
             </div>
           )}
@@ -159,13 +160,13 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
           <div>
             <div className="flex items-start justify-between">
               <div>
-                <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-700">
+                <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-700">
                   {item.category?.slug
                     ? tCat(getCategoryTranslationKey(item.category.slug) as Parameters<typeof tCat>[0])
                     : item.category?.name}
                 </span>
-                <h1 className="mt-3 text-3xl font-bold text-gray-900">{item.title}</h1>
-                <div className="mt-2 flex items-center gap-1.5 text-gray-500">
+                <h1 className="mt-3 text-3xl font-bold text-text">{item.title}</h1>
+                <div className="mt-2 flex items-center gap-1.5 text-text-secondary">
                   <MapPin size={16} />
                   <span>{item.city}</span>
                 </div>
@@ -198,7 +199,7 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
             </div>
 
             <div className="mt-6">
-              <h2 className="text-lg font-semibold text-gray-900">{t('description')}</h2>
+              <h2 className="text-lg font-semibold text-text">{t('description')}</h2>
               <div className="mt-2">
                 <RichTextContent html={item.description} />
               </div>
@@ -206,11 +207,11 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
           </div>
 
           {/* Owner */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900">{t('listedBy')}</h2>
+          <div className="rounded-xl border border-border bg-surface p-6">
+            <h2 className="text-lg font-semibold text-text">{t('listedBy')}</h2>
             <div className="mt-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-alt">
                   {item.owner?.avatar_url ? (
                     <Image
                       src={item.owner.avatar_url}
@@ -220,11 +221,11 @@ export function ItemDetailClient({ item }: ItemDetailClientProps) {
                       className="rounded-full"
                     />
                   ) : (
-                    <User size={24} className="text-gray-400" />
+                    <User size={24} className="text-text-muted" />
                   )}
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{item.owner?.name}</p>
+                  <p className="font-medium text-text">{item.owner?.name}</p>
                 </div>
               </div>
               {user && user.id !== item.owner?.id && (

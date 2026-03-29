@@ -59,8 +59,8 @@ function ToolbarButton({
       className={cn(
         'flex h-7 w-7 items-center justify-center rounded text-sm transition-colors',
         active
-          ? 'bg-emerald-100 text-emerald-700'
-          : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700',
+          ? 'bg-orange-100 text-orange-700'
+          : 'text-text-secondary hover:bg-surface-alt hover:text-text-secondary',
         disabled && 'cursor-not-allowed opacity-30',
       )}>
       {children}
@@ -95,7 +95,7 @@ export function RichTextEditor({
       Placeholder.configure({
         placeholder: placeholder ?? 'Write a description…',
         emptyEditorClass:
-          'before:content-[attr(data-placeholder)] before:text-gray-400 before:float-left before:h-0 before:pointer-events-none',
+          'before:content-[attr(data-placeholder)] before:text-text-muted before:float-left before:h-0 before:pointer-events-none',
       }),
       CharacterCount.configure({ limit: maxLength }),
     ],
@@ -104,7 +104,7 @@ export function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          'prose prose-sm prose-emerald max-w-none min-h-[140px] px-4 py-3 focus:outline-none',
+          'prose prose-sm prose-orange max-w-none min-h-[140px] px-4 py-3 focus:outline-none',
       },
     },
     onUpdate({ editor }) {
@@ -129,16 +129,16 @@ export function RichTextEditor({
   return (
     <div className={cn('space-y-1', className)}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">{label}</label>
+        <label className="block text-sm font-medium text-text-secondary">{label}</label>
       )}
 
       <div
         className={cn(
-          'overflow-hidden rounded-lg border bg-white shadow-sm transition-colors',
-          error ? 'border-red-400 ring-1 ring-red-400' : 'border-gray-200 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500',
+          'overflow-hidden rounded-lg border bg-surface shadow-sm transition-colors',
+          error ? 'border-red-400 ring-1 ring-red-400' : 'border-border focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500',
         )}>
         {/* ── Toolbar ────────────────────────────────────── */}
-        <div className="flex flex-wrap items-center gap-0.5 border-b border-gray-100 bg-gray-50 px-2 py-1.5">
+        <div className="flex flex-wrap items-center gap-0.5 border-b border-border-light bg-page-alt px-2 py-1.5">
           {/* History */}
           <ToolbarButton
             onClick={() => editor.chain().focus().undo().run()}
@@ -227,11 +227,11 @@ export function RichTextEditor({
         <EditorContent editor={editor} />
 
         {/* ── Footer: char count ─────────────────────────── */}
-        <div className="flex justify-end border-t border-gray-100 bg-gray-50 px-3 py-1">
+        <div className="flex justify-end border-t border-border-light bg-page-alt px-3 py-1">
           <span
             className={cn(
               'text-xs tabular-nums',
-              isNearLimit ? 'text-amber-500' : 'text-gray-400',
+              isNearLimit ? 'text-amber-500' : 'text-text-muted',
               count >= maxLength && 'text-red-500 font-medium',
             )}>
             {count} / {maxLength}

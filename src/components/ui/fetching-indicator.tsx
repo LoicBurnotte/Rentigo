@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useIsFetching } from '@tanstack/react-query'
 
 type Phase = 'idle' | 'loading' | 'completing'
@@ -8,22 +8,21 @@ type Phase = 'idle' | 'loading' | 'completing'
 export function GlobalFetchingIndicator() {
   const isFetching = useIsFetching()
   const [phase, setPhase] = useState<Phase>('idle')
+  const safetyRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
-  // Effect 1: isFetching → phase transition.
-  // Uses functional setState so we never capture a stale `phase` in the
-  // closure — the updater callback always receives the current state.
   useEffect(() => {
     if (isFetching > 0) {
       setPhase('loading')
+      // Safety: force complete after 15s to prevent stuck bar
+      clearTimeout(safetyRef.current)
+      safetyRef.current = setTimeout(() => setPhase('completing'), 15000)
     } else {
-      // Only advance to 'completing' when we were actively loading.
-      // Keeps 'idle' and 'completing' phases untouched.
+      clearTimeout(safetyRef.current)
       setPhase((prev) => (prev === 'loading' ? 'completing' : prev))
     }
+    return () => clearTimeout(safetyRef.current)
   }, [isFetching])
 
-  // Effect 2: completing → idle after the CSS animations finish
-  // (0.25s width snap + 0.4s fade with 0.25s delay = 0.65s total).
   useEffect(() => {
     if (phase !== 'completing') return
     const t = setTimeout(() => setPhase('idle'), 650)
@@ -41,7 +40,7 @@ export function GlobalFetchingIndicator() {
           : { opacity: 1 }
       }>
       <div
-        className="h-full bg-emerald-500"
+        className="h-full bg-orange-500"
         style={
           phase === 'loading'
             ? { width: '75%', transition: 'width 8s cubic-bezier(0.1, 0.5, 0.5, 1)' }

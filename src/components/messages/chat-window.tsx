@@ -39,7 +39,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-600" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-orange-600" />
       </div>
     )
   }
@@ -53,10 +53,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             <div key={msg.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
               <div
                 className={`max-w-[70%] rounded-2xl px-4 py-2 ${
-                  isOwn ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-900'
+                  isOwn ? 'bg-orange-600 text-white' : 'bg-surface-alt text-text'
                 }`}>
                 <p className="text-sm">{msg.message}</p>
-                <p className={`mt-1 text-xs ${isOwn ? 'text-emerald-200' : 'text-gray-400'}`}>
+                <p className={`mt-1 text-xs ${isOwn ? 'text-orange-200' : 'text-text-muted'}`}>
                   {new Date(msg.created_at).toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -69,12 +69,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="border-t border-gray-200 p-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="border-t border-border p-4">
         <div className="flex gap-3">
           <input
             {...register('message')}
             placeholder={t('typePlaceholder')}
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            className="flex-1 rounded-lg border border-border px-4 py-2.5 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
             autoComplete="off"
           />
           <Button type="submit" disabled={sendMessage.isPending}>

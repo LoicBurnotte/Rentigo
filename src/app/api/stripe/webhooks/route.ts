@@ -27,13 +27,16 @@ export async function POST(request: Request) {
       const bookingId = session.metadata?.booking_id
 
       if (bookingId) {
-        await supabase
-          .from('bookings')
-          .update({
-            status: 'confirmed',
-            stripe_payment_intent: session.payment_intent as string,
-          })
-          .eq('id', bookingId)
+        const { data: row } = await supabase.from('bookings').select('status').eq('id', bookingId).maybeSingle()
+        if (row?.status === 'pending') {
+          await supabase
+            .from('bookings')
+            .update({
+              status: 'confirmed',
+              stripe_payment_intent: session.payment_intent as string,
+            })
+            .eq('id', bookingId)
+        }
       }
       break
     }
@@ -43,7 +46,18 @@ export async function POST(request: Request) {
       const bookingId = session.metadata?.booking_id
 
       if (bookingId) {
-        await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', bookingId)
+        const { data: row } = await supabase.from('bookings').select('status').eq('id', bookingId).maybeSingle()
+        if (row?.status === 'pending') {
+          await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', bookingId)
+        }
+      }
+      break
+    }
+
+    case 'account.application.deauthorized': {
+      const accountId = event.account
+      if (accountId) {
+        await supabase.from('users').update({ stripe_account_id: null }).eq('stripe_account_id', accountId)
       }
       break
     }

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { useRouter } from '@/i18n/navigation'
+import { useRouter, usePathname } from '@/i18n/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createItemSchema, type ItemFormInput, type ItemInput } from '@/lib/validations'
@@ -22,18 +22,19 @@ import type { LocationValue } from '@/types/location'
 
 const LocationPicker = dynamic(() => import('@/components/items/location-picker').then((mod) => mod.LocationPicker), {
   ssr: false,
-  loading: () => <div className="h-10 animate-pulse rounded-lg bg-gray-100" />,
+  loading: () => <div className="h-10 animate-pulse rounded-lg bg-surface-alt" />,
 })
 
 const RichTextEditor = dynamic(() => import('@/components/ui/rich-text-editor').then((mod) => mod.RichTextEditor), {
   ssr: false,
-  loading: () => <div className="h-48 animate-pulse rounded-lg bg-gray-100" />,
+  loading: () => <div className="h-48 animate-pulse rounded-lg bg-surface-alt" />,
 })
 
 export default function EditItemPage() {
   const params = useParams()
   const slug = params.slug as string
   const router = useRouter()
+  const pathname = usePathname()
   const { user, loading } = useAuth()
   const updateItem = useUpdateItem()
   const [images, setImages] = useState<string[]>([])
@@ -64,7 +65,7 @@ export default function EditItemPage() {
       const [itemRes, catRes] = await Promise.all([
         supabase
           .from('items')
-          .select('*, owner:users!owner_id(id, name, avatar_url), category:categories!category_id(*)')
+          .select('*, owner:users!owner_id(id, name, avatar_url, is_paused), category:categories!category_id(*)')
           .eq('slug', slug)
           .single(),
         supabase.from('categories').select('*'),
@@ -104,7 +105,7 @@ export default function EditItemPage() {
 
   if (loading || fetchLoading) return <PageLoading />
   if (!user) {
-    router.push('/auth/login')
+    router.push(`/auth/login?returnTo=${encodeURIComponent(pathname)}`)
     return null
   }
   if (item && item.owner_id !== user.id) {
@@ -147,12 +148,12 @@ export default function EditItemPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-      <p className="mt-2 text-gray-500">{t('subtitle')}</p>
+      <h1 className="text-3xl font-bold text-text">{t('title')}</h1>
+      <p className="mt-2 text-text-secondary">{t('subtitle')}</p>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-8 space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        className="mt-8 space-y-6 rounded-xl border border-border bg-surface p-6 shadow-sm">
         <Input
           id="title"
           label={tn('itemTitle')}

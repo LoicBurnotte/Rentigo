@@ -51,7 +51,7 @@ export default async function ItemPage({ params }: Props) {
 
   const { data: item } = await supabase
     .from('items')
-    .select('*, owner:users!owner_id(id, name, avatar_url), category:categories!category_id(*)')
+    .select('*, owner:users!owner_id(id, name, avatar_url, is_paused), category:categories!category_id(*)')
     .eq('slug', slug)
     .single()
 

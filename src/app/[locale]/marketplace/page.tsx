@@ -45,14 +45,14 @@ function MarketplaceContent() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-        <p className="mt-2 text-gray-500">{t('subtitle')}</p>
+        <h1 className="text-3xl font-bold text-text">{t('title')}</h1>
+        <p className="mt-2 text-text-secondary">{t('subtitle')}</p>
       </div>
 
       <SearchFilters />
 
       {cityCoords && cityParam && (
-        <div className="mt-4 flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+        <div className="mt-4 flex items-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-sm text-orange-700">
           <MapPin size={14} className="shrink-0" />
           <span>{t('radiusActive', { radius: radiusKm, city: cityParam })}</span>
         </div>

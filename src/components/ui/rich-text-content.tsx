@@ -17,12 +17,12 @@ export function RichTextContent({ html, className }: RichTextContentProps) {
       className={cn(
         'prose prose-sm prose-gray max-w-none',
         // Tune default typography for the card context
-        'prose-headings:font-semibold prose-headings:text-gray-900',
-        'prose-p:text-gray-600 prose-p:leading-relaxed',
-        'prose-li:text-gray-600',
+        'prose-headings:font-semibold prose-headings:text-text',
+        'prose-p:text-text-secondary prose-p:leading-relaxed',
+        'prose-li:text-text-secondary',
         'prose-strong:text-gray-800',
-        'prose-blockquote:border-emerald-400 prose-blockquote:text-gray-500',
-        'prose-hr:border-gray-200',
+        'prose-blockquote:border-orange-400 prose-blockquote:text-text-secondary',
+        'prose-hr:border-border',
         className,
       )}
       dangerouslySetInnerHTML={{ __html: html }}

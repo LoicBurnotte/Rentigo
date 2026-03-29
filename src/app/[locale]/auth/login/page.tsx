@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { useRouter } from '@/i18n/navigation'
@@ -14,15 +15,32 @@ import { Input } from '@/components/ui/input'
 import { LogIn } from 'lucide-react'
 
 export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[80vh] items-center justify-center px-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-600 border-t-transparent" />
+        </div>
+      }>
+      <LoginContent />
+    </Suspense>
+  )
+}
+
+function LoginContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { user, loading } = useAuth()
   const [error, setError] = useState<string | null>(null)
 
+  const rawReturnTo = searchParams.get('returnTo')
+  const returnTo = rawReturnTo && rawReturnTo.startsWith('/') && !rawReturnTo.startsWith('//') ? rawReturnTo : '/'
+
   useEffect(() => {
     if (!loading && user) {
-      router.replace('/')
+      router.replace(returnTo)
     }
-  }, [user, loading, router])
+  }, [user, loading, router, returnTo])
 
   const t = useTranslations('auth')
   const tv = useTranslations('validation')
@@ -50,14 +68,14 @@ export default function LoginPage() {
       return
     }
 
-    router.push('/')
+    router.push(returnTo)
     router.refresh()
   }
 
   if (loading) {
     return (
       <div className="flex min-h-[80vh] items-center justify-center px-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-600 border-t-transparent" />
       </div>
     )
   }
@@ -70,16 +88,16 @@ export default function LoginPage() {
     <div className="flex min-h-[80vh] items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-xl font-bold text-white">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-orange-600 text-xl font-bold text-white">
             R
           </div>
-          <h1 className="mt-4 text-2xl font-bold text-gray-900">{t('welcomeBack')}</h1>
-          <p className="mt-2 text-sm text-gray-500">{t('signInToAccount')}</p>
+          <h1 className="mt-4 text-2xl font-bold text-text">{t('welcomeBack')}</h1>
+          <p className="mt-2 text-sm text-text-secondary">{t('signInToAccount')}</p>
         </div>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mt-8 space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          className="mt-8 space-y-4 rounded-xl border border-border bg-surface p-6 shadow-sm">
           <Input
             id="email"
             label={t('email')}
@@ -106,9 +124,9 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-500">
+        <p className="mt-4 text-center text-sm text-text-secondary">
           {t('noAccount')}{' '}
-          <Link href="/auth/signup" className="font-medium text-emerald-600 hover:text-emerald-700">
+          <Link href="/auth/signup" className="font-medium text-orange-600 hover:text-orange-700">
             {tc('signUp')}
           </Link>
         </p>

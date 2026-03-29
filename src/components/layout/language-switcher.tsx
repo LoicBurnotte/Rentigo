@@ -33,20 +33,20 @@ export function LanguageSwitcher() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+        className="flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-text-secondary hover:bg-surface-alt hover:text-text"
         aria-label="Switch language">
         <Globe size={16} />
         <span className="uppercase">{locale}</span>
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1 min-w-[140px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+        <div className="absolute right-0 top-full z-50 mt-1 min-w-[140px] overflow-hidden rounded-lg border border-border bg-surface shadow-lg">
           {routing.locales.map((loc) => (
             <button
               key={loc}
               onClick={() => switchLocale(loc)}
-              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors hover:bg-gray-50 ${
-                loc === locale ? 'bg-emerald-50 font-medium text-emerald-700' : 'text-gray-700'
+              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors hover:bg-page-alt dark:hover:bg-surface-alt ${
+                loc === locale ? 'bg-orange-50 font-medium text-orange-700' : 'text-text-secondary'
               }`}>
               {t(loc)}
             </button>

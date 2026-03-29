@@ -22,8 +22,8 @@ export default function ConversationPage({ params }: Props) {
 
   return (
     <div className="flex flex-col" style={{ height: 'calc(100vh - 4rem)' }}>
-      <div className="border-b border-gray-200 bg-white px-4 py-3">
-        <Link href="/messages" className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
+      <div className="border-b border-border bg-surface px-4 py-3">
+        <Link href="/messages" className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text">
           <ArrowLeft size={16} />
           {t('backToMessages')}
         </Link>

@@ -53,12 +53,12 @@ export function MapView({ items, center = DEFAULT_CENTER, zoom = DEFAULT_ZOOM }:
                       className="mb-2 h-24 w-full rounded object-cover"
                     />
                   )}
-                  <h3 className="font-semibold text-gray-900">{item.title}</h3>
-                  <p className="text-sm text-emerald-600">{formatCurrency(item.price_per_day)}/day</p>
-                  <p className="text-xs text-gray-500">{item.city}</p>
+                  <h3 className="font-semibold text-text">{item.title}</h3>
+                  <p className="text-sm text-orange-600">{formatCurrency(item.price_per_day)}/day</p>
+                  <p className="text-xs text-text-secondary">{item.city}</p>
                   <Link
                     href={`/items/${item.slug}`}
-                    className="mt-2 inline-block cursor-pointer text-sm font-medium text-emerald-600 hover:text-emerald-700">
+                    className="mt-2 inline-block cursor-pointer text-sm font-medium text-orange-600 hover:text-orange-700">
                     View details &rarr;
                   </Link>
                 </div>

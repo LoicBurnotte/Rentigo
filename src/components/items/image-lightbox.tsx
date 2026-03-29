@@ -49,13 +49,13 @@ export function ImageLightbox({ images, currentIndex, getUrl, onClose, onNavigat
         <div className="flex shrink-0 items-center justify-between px-4 py-3" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center gap-3">
             {title && <span className="text-sm font-medium text-white/80">{title}</span>}
-            <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs text-white/60">
+            <span className="rounded-full bg-surface/10 px-2.5 py-0.5 text-xs text-white/60">
               {currentIndex + 1} / {images.length}
             </span>
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white">
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors hover:bg-surface/10 hover:text-white">
             <X size={20} />
           </button>
         </div>
@@ -67,7 +67,7 @@ export function ImageLightbox({ images, currentIndex, getUrl, onClose, onNavigat
           {images.length > 1 && (
             <button
               onClick={prev}
-              className="absolute left-3 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20">
+              className="absolute left-3 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-surface/10 text-white transition-colors hover:bg-surface/20">
               <ChevronLeft size={22} />
             </button>
           )}
@@ -94,7 +94,7 @@ export function ImageLightbox({ images, currentIndex, getUrl, onClose, onNavigat
           {images.length > 1 && (
             <button
               onClick={next}
-              className="absolute right-3 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20">
+              className="absolute right-3 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-surface/10 text-white transition-colors hover:bg-surface/20">
               <ChevronRight size={22} />
             </button>
           )}

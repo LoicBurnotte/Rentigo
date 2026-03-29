@@ -66,7 +66,7 @@ export function AvatarUpload({ userId, avatarUrl, name, onUpload }: AvatarUpload
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="relative">
-        <div className="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-200 bg-gray-50">
+        <div className="h-24 w-24 overflow-hidden rounded-full border-2 border-border bg-page-alt">
           <img
             src={displayUrl}
             alt={name}
@@ -80,7 +80,7 @@ export function AvatarUpload({ userId, avatarUrl, name, onUpload }: AvatarUpload
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 disabled:opacity-50"
+          className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-orange-600 text-white shadow-sm hover:bg-orange-700 disabled:opacity-50"
           title={t('changeAvatar')}>
           {uploading ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}
         </button>
@@ -93,7 +93,7 @@ export function AvatarUpload({ userId, avatarUrl, name, onUpload }: AvatarUpload
         />
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
-      <p className="text-xs text-gray-400">{t('avatarHint')}</p>
+      <p className="text-xs text-text-muted">{t('avatarHint')}</p>
     </div>
   )
 }

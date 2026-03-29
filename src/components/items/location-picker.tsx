@@ -96,11 +96,11 @@ export function LocationPicker({ value, onChange, error }: LocationPickerProps) 
 
   return (
     <div className="space-y-3">
-      <label className="block text-sm font-medium text-gray-700">{t('searchAddress')}</label>
+      <label className="block text-sm font-medium text-text-secondary">{t('searchAddress')}</label>
 
       <div ref={containerRef} className="relative">
         <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             value={query}
@@ -108,32 +108,32 @@ export function LocationPicker({ value, onChange, error }: LocationPickerProps) 
             onFocus={() => results.length > 0 && setShowResults(true)}
             placeholder={t('addressPlaceholder')}
             autoComplete="off"
-            className={`h-10 w-full rounded-lg border pl-9 pr-9 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 ${
-              error ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-emerald-500'
+            className={`h-10 w-full rounded-lg border pl-9 pr-9 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 ${
+              error ? 'border-red-400 focus:border-red-400' : 'border-border focus:border-orange-500'
             }`}
           />
           {searching && (
-            <Loader2 size={16} className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-gray-400" />
+            <Loader2 size={16} className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-text-muted" />
           )}
         </div>
 
         {showResults && results.length > 0 && (
-          <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+          <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-border bg-surface shadow-lg">
             {results.map((result) => (
               <button
                 key={result.place_id}
                 type="button"
                 onClick={() => handleSelect(result)}
-                className="flex w-full cursor-pointer items-start gap-2 px-3 py-2.5 text-left text-sm hover:bg-gray-50">
-                <MapPin size={14} className="mt-0.5 shrink-0 text-emerald-500" />
-                <span className="text-gray-700">{result.display_name}</span>
+                className="flex w-full cursor-pointer items-start gap-2 px-3 py-2.5 text-left text-sm hover:bg-page-alt dark:hover:bg-surface-alt">
+                <MapPin size={14} className="mt-0.5 shrink-0 text-orange-500" />
+                <span className="text-text-secondary">{result.display_name}</span>
               </button>
             ))}
           </div>
         )}
 
         {showResults && !searching && query.length >= 3 && results.length === 0 && (
-          <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-500 shadow-lg">
+          <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-secondary shadow-lg">
             {t('noAddressFound')}
           </div>
         )}
@@ -143,7 +143,7 @@ export function LocationPicker({ value, onChange, error }: LocationPickerProps) 
 
       {hasLocation && (
         <>
-          <div className="overflow-hidden rounded-lg border border-gray-200" style={{ height: '200px' }}>
+          <div className="overflow-hidden rounded-lg border border-border" style={{ height: '200px' }}>
             <MapContainer
               center={[value.latitude, value.longitude]}
               zoom={13}
@@ -165,8 +165,8 @@ export function LocationPicker({ value, onChange, error }: LocationPickerProps) 
               <MapRecenter lat={value.latitude} lng={value.longitude} />
             </MapContainer>
           </div>
-          <p className="flex items-start gap-1.5 text-xs text-gray-500">
-            <MapPin size={12} className="mt-0.5 shrink-0 text-emerald-500" />
+          <p className="flex items-start gap-1.5 text-xs text-text-secondary">
+            <MapPin size={12} className="mt-0.5 shrink-0 text-orange-500" />
             {t('approxLocationNote')}
           </p>
         </>

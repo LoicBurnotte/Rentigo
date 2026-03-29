@@ -46,17 +46,17 @@ export default function MapPage() {
 
   return (
     <div className="flex flex-col" style={{ height: 'calc(100vh - 4rem)' }}>
-      <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between border-b border-border bg-surface px-4 py-4 sm:px-6 lg:px-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-sm text-gray-500">{t('itemsAvailable', { count: items?.length || 0 })}</p>
+          <h1 className="text-2xl font-bold text-text">{t('title')}</h1>
+          <p className="text-sm text-text-secondary">{t('itemsAvailable', { count: items?.length || 0 })}</p>
         </div>
         {navigator?.geolocation && (
           <button
             onClick={handleLocate}
             disabled={locating}
-            className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-600 shadow-sm transition-colors hover:bg-gray-50 disabled:opacity-60">
-            <LocateFixed size={16} className={locating ? 'animate-pulse text-emerald-500' : ''} />
+            className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-text-secondary shadow-sm transition-colors hover:bg-page-alt dark:hover:bg-surface-alt disabled:opacity-60">
+            <LocateFixed size={16} className={locating ? 'animate-pulse text-orange-500' : ''} />
             {t('myLocation')}
           </button>
         )}

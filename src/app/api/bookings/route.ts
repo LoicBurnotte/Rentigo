@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { stripe, PLATFORM_FEE_PERCENT } from '@/lib/stripe'
+import { localeAbsoluteUrl, resolveAppLocale } from '@/lib/app-url'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -14,7 +15,8 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { item_id, start_date, end_date, total_price } = body
+    const { item_id, start_date, end_date, total_price, locale: localeRaw } = body
+    const locale = resolveAppLocale(localeRaw)
 
     // Get item and owner info
     const { data: item, error: itemError } = await supabase
@@ -31,6 +33,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'You cannot book your own item' }, { status: 400 })
     }
 
+    // Check if item or owner is paused
+    const owner = item.owner as { stripe_account_id: string | null; name: string; is_paused: boolean } | null
+    if (item.is_paused || owner?.is_paused) {
+      return NextResponse.json({ message: 'This item is currently unavailable' }, { status: 400 })
+    }
+
     // Check availability
     const { data: conflicting } = await supabase
       .from('bookings')
@@ -42,6 +50,18 @@ export async function POST(request: Request) {
 
     if (conflicting && conflicting.length > 0) {
       return NextResponse.json({ message: 'These dates are not available' }, { status: 409 })
+    }
+
+    // Check owner-blocked date ranges
+    const { data: unavailConflicts } = await supabase
+      .from('item_unavailabilities')
+      .select('id')
+      .eq('item_id', item_id)
+      .lt('start_date', end_date)
+      .gt('end_date', start_date)
+
+    if (unavailConflicts && unavailConflicts.length > 0) {
+      return NextResponse.json({ message: 'These dates are blocked by the owner' }, { status: 409 })
     }
 
     // Create booking
@@ -63,7 +83,6 @@ export async function POST(request: Request) {
     }
 
     // Create Stripe Checkout session
-    const owner = item.owner as { stripe_account_id: string | null; name: string }
     const ownerStripeAccountId = owner?.stripe_account_id
 
     if (!ownerStripeAccountId) {
@@ -98,8 +117,8 @@ export async function POST(request: Request) {
         },
       },
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/${booking.id}?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/items/${item.slug}?cancelled=true`,
+      success_url: `${localeAbsoluteUrl(locale, `/checkout/${booking.id}`)}?success=true`,
+      cancel_url: `${localeAbsoluteUrl(locale, `/items/${item.slug}`)}?cancelled=true`,
       metadata: {
         booking_id: booking.id,
       },

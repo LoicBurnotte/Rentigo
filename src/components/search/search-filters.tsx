@@ -77,14 +77,14 @@ export function SearchFilters() {
       {/* Main search bar */}
       <div className="flex gap-3">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             placeholder={t('searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="h-11 w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 text-sm placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            className="h-11 w-full rounded-lg border border-border bg-surface pl-10 pr-4 text-sm placeholder:text-text-muted focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
           />
         </div>
         <Button onClick={applyFilters} size="lg">
@@ -96,21 +96,21 @@ export function SearchFilters() {
       </div>
 
       {showFilters && (
-        <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-xl border border-border bg-surface p-4 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900">{t('filters')}</h3>
-            <button onClick={clearFilters} className="text-sm text-emerald-600 hover:text-emerald-700">
+            <h3 className="font-semibold text-text">{t('filters')}</h3>
+            <button onClick={clearFilters} className="text-sm text-orange-600 hover:text-orange-700">
               {t('clearAll')}
             </button>
           </div>
 
           {/* Category */}
           <div className="mb-4">
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">{t('category')}</label>
+            <label className="mb-1.5 block text-sm font-medium text-text-secondary">{t('category')}</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
+              className="flex h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20">
               <option value="">{t('allCategories')}</option>
               {CATEGORIES.map((cat) => (
                 <option key={cat.slug} value={cat.slug}>
@@ -127,10 +127,10 @@ export function SearchFilters() {
 
           {/* Radius slider — visible only when location is selected */}
           {locationSelected && (
-            <div className="mb-4 rounded-lg border border-gray-100 bg-gray-50 p-3">
+            <div className="mb-4 rounded-lg border border-border-light bg-page-alt p-3">
               <div className="mb-2 flex items-center justify-between text-sm">
-                <span className="font-medium text-gray-700">{t('radius')}</span>
-                <span className="font-semibold text-emerald-600">{radius} km</span>
+                <span className="font-medium text-text-secondary">{t('radius')}</span>
+                <span className="font-semibold text-orange-600">{radius} km</span>
               </div>
               <input
                 type="range"
@@ -139,9 +139,9 @@ export function SearchFilters() {
                 step={5}
                 value={radius}
                 onChange={(e) => setRadius(e.target.value)}
-                className="h-2 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-emerald-600"
+                className="h-2 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-orange-600"
               />
-              <div className="mt-1.5 flex justify-between text-xs text-gray-400">
+              <div className="mt-1.5 flex justify-between text-xs text-text-muted">
                 <span>5 km</span>
                 <span>150 km</span>
               </div>
@@ -189,7 +189,7 @@ export function SearchFilters() {
             }}
             className={
               'flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ' +
-              (cat.slug === category ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200')
+              (cat.slug === category ? 'bg-orange-600 text-white' : 'bg-surface-alt text-text-secondary hover:bg-surface-alt')
             }>
             {tc(CATEGORY_NAME_KEYS[cat.slug] || cat.slug)}
             {cat.slug === category && <X size={14} />}

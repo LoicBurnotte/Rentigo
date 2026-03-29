@@ -104,16 +104,16 @@ export function DateRangePicker({
           type="button"
           onClick={() => setCurrentMonth((m) => subMonths(m, 1))}
           disabled={!canGoPrev}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 disabled:cursor-default disabled:opacity-30">
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-surface-alt disabled:cursor-default disabled:opacity-30">
           <ChevronLeft size={16} />
         </button>
-        <span className="text-sm font-semibold text-gray-900">
+        <span className="text-sm font-semibold text-text">
           {format(currentMonth, 'MMMM yyyy')}
         </span>
         <button
           type="button"
           onClick={() => setCurrentMonth((m) => addMonths(m, 1))}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100">
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-surface-alt">
           <ChevronRight size={16} />
         </button>
       </div>
@@ -121,7 +121,7 @@ export function DateRangePicker({
       {/* Weekday headers */}
       <div className="mb-1 grid grid-cols-7">
         {WEEKDAYS.map((d) => (
-          <span key={d} className="py-1 text-center text-xs font-medium text-gray-400">
+          <span key={d} className="py-1 text-center text-xs font-medium text-text-muted">
             {d}
           </span>
         ))}
@@ -149,7 +149,7 @@ export function DateRangePicker({
             <div key={day.toISOString()} className="relative flex h-10 items-center justify-center">
               {/* Range background */}
               {fillClass && (
-                <div className={`absolute inset-y-0.5 bg-emerald-100 ${fillClass}`} />
+                <div className={`absolute inset-y-0.5 bg-orange-100 ${fillClass}`} />
               )}
 
               {/* Day button */}
@@ -166,12 +166,12 @@ export function DateRangePicker({
                   disabled
                     ? 'cursor-not-allowed text-gray-300'
                     : isRangeEdge
-                      ? 'bg-emerald-600 font-semibold text-white hover:bg-emerald-700'
+                      ? 'bg-orange-600 font-semibold text-white hover:bg-orange-700'
                       : today
-                        ? 'font-bold text-emerald-600 hover:bg-emerald-100'
+                        ? 'font-bold text-orange-600 hover:bg-orange-100'
                         : otherMonth
-                          ? 'text-gray-300 hover:bg-gray-100'
-                          : 'text-gray-700 hover:bg-emerald-100',
+                          ? 'text-gray-300 hover:bg-surface-alt'
+                          : 'text-text-secondary hover:bg-orange-100',
                 ]
                   .filter(Boolean)
                   .join(' ')}>
@@ -183,7 +183,7 @@ export function DateRangePicker({
       </div>
 
       {/* Selection hint */}
-      <p className="mt-2 text-center text-xs text-gray-400">
+      <p className="mt-2 text-center text-xs text-text-muted">
         {!start
           ? 'Select a start date'
           : !end

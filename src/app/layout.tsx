@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google'
+import { ThemeProvider } from '@/providers/theme-provider'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -22,8 +23,8 @@ export default async function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className={`${inter.className} bg-gray-50 text-gray-900 antialiased`} suppressHydrationWarning>
-        {children}
+      <body className={`${inter.className} bg-page text-text antialiased`} suppressHydrationWarning>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )
